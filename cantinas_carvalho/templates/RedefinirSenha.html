@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="redefinirSenha.css">
+    <title>Cantinas Carvalho | Esqueceu a senha</title>
+</head>
+
+<body>
+    <header>
+        <div class="topo">
+            <a href="/login" class="voltar">
+                <i class="fa-solid fa-arrow-left"></i>
+            </a>
+
+            <div class="btn">
+                <input type="checkbox" class="checkbox" id="botao-tema" />
+                <label class="label" for="botao-tema">
+                    <img src="img/sol.png" alt="Sol" class="img-sol">
+                    <img src="img/lua.png" alt="Lua" class="img-lua">
+                    <div class="indicador"></div>
+                </label>
+            </div>
+        </div>
+    </header>
+
+    <div class="container" id="redefinir">
+        <h1>Redefinição de senha</h1>
+
+        <p>Digite o email que você cadastrou a sua conta:</p>
+        <input class="email" type="text" placeholder="Digite o seu email" required>
+
+        <a href="" class="botao">Enviar o código</a>
+    </div>
+
+    <div class="container hidden" id="cod">
+
+        <a href="" class="botao-x">X</a>
+        <h1>Confirmação de código</h1>
+        <div class="codigo">
+            <input type="text" placeholder="X" class="cod" maxlength="1" inputmode="numeric">
+            <input type="text" placeholder="X" class="cod" maxlength="1" inputmode="numeric">
+            <input type="text" placeholder="X" class="cod" maxlength="1" inputmode="numeric">
+            <input type="text" placeholder="X" class="cod" maxlength="1" inputmode="numeric">
+
+        </div>
+        <a href="" class="botaoCodigo">Verificar o código</a>
+    </div>
+
+    <div class="container hidden" id="novaSenha">
+
+        <a href="" class="botao-x">X</a>
+        <h1>Nova senha</h1>
+        <h3>Sua nova senha deve conter:</h3>
+        <ul>
+            <li>Sua senha deve conter ni mínimo 8 caracteres</li>
+            <li>Deve incluir pelo menos uma letra maiúscula (A-Z)</li>
+            <li>Deve incluir pelo menos uma letra minúscula (a-z)</li>
+            <li>Deve conter pelo menos um número (0-9)</li>
+            <li>Deve conter pelo menos um caractere especial (ex: !, @, #, $, %)</li>
+            <li>Evitar usar informações pessoais (nome, data de nascimento, etc)</li>
+            <li>Não utilize senhas fáceis ou sêquencias (ex: 123456, abc123)</li>
+            <li>Não utilize senhas já usadas anteriormente</li>
+        </ul>
+
+        <p>Nova senha:</p>
+        <input class="email" type="password" placeholder="Digite a sua nova senha" required>
+
+        <p>Confirme a sua nova senha:</p>
+        <input class="email" type="password" placeholder="Confirme a sua nova senha" required>
+
+        <a href="" class="botao">Alterar a senha  </a>
+    </div>
+
+     <script src="redefinirSenha.js"></script>
+</body>
+
+</html>

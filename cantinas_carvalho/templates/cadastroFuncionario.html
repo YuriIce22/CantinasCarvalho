@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro Funcionário</title>
+    <link rel="stylesheet" href="cadastroFuncionario.css">
+    <link rel="shortcut icon" href="caminho/do/seu-icone.png" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <header>
+        <div class="topo">
+            <a href="\" class="voltar">
+                <i class="fa-solid fa-arrow-left"></i>
+            </a>
+
+            <div class="btn">
+                <input type="checkbox" class="checkbox" id="botao-tema" />
+                <label class="label" for="botao-tema">
+                    <img src="img/sol.png" alt="Sol" class="img-sol">
+                    <img src="img/lua.png" alt="Lua" class="img-lua">
+                    <div class="indicador"></div>
+                </label>
+            </div>
+        </div>
+    </header>
+
+    <div id="login">
+        <form class="form">
+            <div class="logo">
+                <img src="img/Logo.png" alt="Logo">
+            </div>
+            <div class="form-container">
+                <label for="nome">Nome:</label>
+                <div class="nome">
+                    <input type="text" id="nome" placeholder="Seu Nome" required>
+                    <i class=""></i>
+                </div>
+
+                <label for="email">E-mail:</label>
+                <div class="email-icone">
+                    <input type="email" id="email" placeholder="Seu e-mail" required>
+                </div>
+
+                <label for="senha">Senha:</label>
+                <div class="nome">
+                    <input type="password" id="senha" placeholder="Senha" required>
+                </div>
+
+                <label for="nome">Confirme a senha:</label>
+                <div class="Confirme_senha ">
+                    <input type="password" id="Confirme_senha" placeholder="Confirme sua senha" required>
+                </div>
+
+                <label for="nome">NIF:</label>
+                <div class="Confirme_senha ">
+                    <input type="password" id="Confirme_senha" placeholder="Digite o seu NIF:" required>
+                </div>
+
+            </div>
+
+            <div class="btn-container">
+                <button id="button">CADASTRAR</button>
+            </div>
+
+            <a id="link" href="/login">Já possui uma conta?</a>
+
+        </form>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

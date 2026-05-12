@@ -1,0 +1,214 @@
+:root{
+    --fundo: #F6F1E6;
+    --fonte: #652A0E;
+    --botao: #652A0E;
+    --hover: #52230d;
+    --fonte-botap: #F6F1E6;
+    --botao-seta: #652A0E;
+    --botao-seta-hover: #52230d;
+    --fundo-tema: #e3d4ba;
+    --indicador: #3a231a;
+}
+
+.dark{
+    --fundo: #1A110E;
+    --fonte: #F0ECE1;
+    --botao: #2c1e1a;
+    --hover: #362520;
+    --botao-seta: #F0ECE1;
+    --botao-seta-hover: #c2b591;
+    --fundo-tema: #3a231a;
+    --indicador: #F0ECE1;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+    background-color: var(--fundo);
+    color: var(--fonte);
+    font-family: 'Inter';
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+}
+
+header {
+    width: 100%;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* Essa classe é essencial para o JS funcionar, serve para o comando de ocultar um elemento no JS*/
+.hidden {
+    display: none !important;
+}
+
+.topo {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+
+.btn {
+    margin-left: auto;
+}
+
+.voltar {
+    font-size: 20px;
+    color: var(--botao-seta);
+    background: transparent;
+    border: none;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.voltar:hover {
+    color: var(--botao-seta-hover);
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+.btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+/* checkbox do Botão */
+
+.checkbox {
+    opacity: 0;
+    position: absolute;
+}
+
+.label {
+    background-color: var(--fundo-tema);
+    border-radius: 50px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    position: relative;
+    height: 26px;
+    width: 50px;
+    transform: scale(1.5);
+
+}
+
+.tema-escuro .label {
+    background-color: var(--fundo-tema);
+}
+
+.label .indicador {
+    background-color: var(--indicador);
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    height: 22px;
+    width: 22px;
+    transition: transform 0.2s linear;
+}
+
+#botao-tema:checked+.label .indicador {
+    transform: translateX(24px);
+}
+
+/* Imagens do Botão  */
+
+.img-lua,
+.img-sol {
+    width: 16px;
+    height: 16px;
+}
+
+.container{
+    margin: 20px;
+    padding: 20px;
+    max-width: 900px;
+    width: 100%;
+    box-shadow: 0 14px 14px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+}
+
+.container h1{
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.container p{
+    margin-top: 50px;
+    font-size: 12px;
+    display: flex;
+    margin-left: 110px;
+}
+
+.container .email{
+    display: block;
+    padding: 8px;
+    background-color: var(--fundo);
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 14px 14px rgba(0, 0, 0, 0.2);
+    width: 650px;
+    margin: 0 auto;
+}
+
+.container .botao, .botaoCodigo{
+    text-decoration: none;
+    margin: 30px auto 0 auto;
+    border: none;
+    box-shadow: 0 14px 14px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background-color: var(--botao);
+    color: var(--fonte-botap);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    display: block;
+    padding: 8px;
+    width: 650px;
+    text-align: center;
+}
+
+.container .botao:hover{
+    background-color: var(--hover);
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+.cod {
+    margin-top: 20px;
+    width: 80px;
+    height: 80px;
+    text-align: center;
+    border-radius: 12px;
+    border: none;
+    background-color: var(--fonte-botap);
+    box-shadow: 0 14px 14px rgba(0, 0, 0, 0.2);
+    font-size: 24px;
+    line-height: 80px;
+}
+
+.codigo{
+   display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+}
+
+.container .botao-x{
+    display: inline-block;
+    text-decoration: none;
+    font-weight: 900;
+    color: var(--fonte);
+    float: right;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.container .botao-x:hover{
+   color: var(--hover);
+    cursor: pointer;
+    transform: scale(1.2);
+}

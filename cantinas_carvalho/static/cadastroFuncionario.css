@@ -1,0 +1,258 @@
+/*  VARIÁVEIS DO TEMA CLARO (Padrão) */
+
+:root {
+    --font-main: 'Inter';
+    --bg-color: #F6F1E6;
+    --card-bg: #F0ECE1;
+    --input-bg: #F2EAD8;
+    --button-bg: #652A0E;
+    --button-text: #FFFFFF;
+    --text-color: #652A0E;
+    --placeholder-color: #CEBF9D;
+    --border-color: #ccc;
+    --bottun-hover: #3d1706;
+    --botao: #652A0E;
+    --botao-hover: #3d1706;
+}
+
+/* VARIÁVEIS DO TEMA ESCURO (Sobrescreve as de cima) */
+
+.tema-escuro {
+    --font-main: 'Inter';
+    --bg-color: #1A110E;
+    --card-bg: #2D1D17;
+    --input-bg: #402820;
+    --button-bg: #F0ECE1;
+    --button-text: #371707;
+    --text-color: #F0ECE1;
+    --placeholder-color: #F0ECE1;
+    --border-color: #5a3a2f;
+    --btn-toggle-bg: #3a231a;
+    --bottun-hover: #d6caa8;
+    --botao: #F0ECE1;
+    --botao-hover: #d6caa8;
+}
+
+
+body {
+    background-color: var(--bg-color);
+    font-family: var(--font-main);
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+header {
+    width: 100%;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.topo {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+
+.btn {
+    margin-left: auto;
+    /* empurra pra direita */
+}
+
+.voltar {
+    font-size: 20px;
+    color: var(--botao);
+    background: transparent;
+    border: none;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.voltar:hover {
+    color: var(--botao-hover);
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+/* Posicionamento do Botão (Modo Escuro e Modo Claro) */
+
+.btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+/* checkbox do Botão */
+
+.checkbox {
+    opacity: 0;
+    /* checkbox real está escondido */
+    position: absolute;
+}
+
+/* Corpo do Botão */
+
+.label {
+    background-color: #e3d4ba;
+    border-radius: 50px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    position: relative;
+    height: 26px;
+    width: 50px;
+    transform: scale(1.5);
+
+}
+
+.tema-escuro .label {
+    background-color: var(--btn-toggle-bg);
+}
+
+.tema-escuro .label .indicador {
+    background-color: #F0ECE1;
+}
+
+
+/* Indicador do Botão */
+
+.label .indicador {
+    background-color: #3a231a;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    height: 22px;
+    width: 22px;
+    transition: transform 0.2s linear;
+    /* transição do deslizamento do indicador */
+}
+
+
+/* Transição do Indicador (Bolinha Branca) */
+/* O sinal de "+" seleciona o elemento que vem LOGO APÓS o input (.label). */
+
+#botao-tema:checked+.label .indicador {
+    transform: translateX(24px);
+    /* o indicador desliza 24px para a direita */
+}
+
+/* Imagens do Botão  */
+
+.img-lua,
+.img-sol {
+    width: 16px;
+    height: 16px;
+}
+
+/* Logo do Projeto */
+
+.logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+img {
+    height: 120px;
+}
+
+#login {
+    flex: 1;
+    /* ocupa o espaço restante do body */
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form {
+    margin-bottom: 20px;
+    margin: 80px;
+    color: var(--text-color);
+    background: var(--card-bg);
+    padding: 50px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 500px;
+}
+
+#nome,
+#email,
+#senha,
+#Confirme_senha {
+    margin-bottom: 7px;
+
+}
+
+label {
+    font-size: 12px;
+    margin-left: 5px;
+    margin-bottom: 3px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: var(--input-bg);
+    color: var(--text-color);
+
+}
+
+.tema-escuro input {
+    border: none;
+}
+
+input::placeholder {
+    color: var(--placeholder-color);
+}
+
+.btn-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 25px;
+}
+
+#button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border: none;
+    font-size: 15px;
+    font-weight: bold;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+#button:hover {
+    transform: scale(1.05);
+    background: var(--bottun-hover);
+}
+
+#button:active {
+    transform: scale(0.95);
+}
+
+#link {
+    display: flex;
+    justify-content: center;
+    margin-top: 5px;
+    color: var(--text-color);
+    font-family: Arial;
+    font-size: 14px;
+}
+
+#link:hover {
+    transform: scale(1.02);
+}

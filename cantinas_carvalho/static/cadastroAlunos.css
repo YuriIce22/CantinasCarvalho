@@ -1,0 +1,314 @@
+/*  VARIÁVEIS DO TEMA CLARO (Padrão) */
+:root {
+    --font-main: 'Inter';
+    --bg-color: #F6F1E6;
+    --card-bg: #F0ECE1;
+    --input-bg: #F2EAD8;
+    --button-bg: #652A0E;
+    --button-text: #FFFFFF;
+    --text-color: #652A0E;
+    --placeholder-color: #CEBF9D;
+    --border-color: #ccc;
+    --bottun-hover: #3d1706;
+    --botao: #652A0E;
+    --botao-hover: #3d1706;
+}
+
+/* VARIÁVEIS DO TEMA ESCURO */
+.tema-escuro {
+    --font-main: 'Inter';
+    --bg-color: #1A110E;
+    --card-bg: #2D1D17;
+    --input-bg: #402820;
+    --button-bg: #F0ECE1;
+    --button-text: #371707;
+    --text-color: #F0ECE1;
+    --placeholder-color: #F0ECE1;
+    --border-color: #5a3a2f;
+    --btn-toggle-bg: #3a231a;
+    --bottun-hover: #d6caa8;
+    --botao: #F0ECE1;
+    --botao-hover: #d6caa8;
+}
+
+/* RESET */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* BODY */
+
+body {
+    background-color: var(--bg-color);
+    font-family: var(--font-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    /* REMOVE O ESPAÇO LATERAL */
+    overflow-x: hidden;
+}
+
+header {
+    width: 100%;
+}
+
+/* TOPO */
+
+.topo {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+
+.btn {
+    margin-left: auto;
+    /* empurra pra direita */
+}
+
+.voltar {
+    font-size: 20px;
+    color: var(--botao);
+    background: transparent;
+    border: none;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.voltar:hover {
+    color: var(--botao-hover);
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+/* Posicionamento do Botão */
+
+.btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+/* checkbox do Botão */
+
+.checkbox {
+    opacity: 0;
+    /* checkbox real está escondido */
+    position: absolute;
+}
+
+
+
+/* Corpo do Botão */
+
+.label {
+    background-color: #e3d4ba;
+    border-radius: 50px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    position: relative;
+    height: 26px;
+    width: 50px;
+    transform: scale(1.5);
+
+}
+
+.tema-escuro .label {
+    background-color: var(--btn-toggle-bg);
+}
+
+.tema-escuro .label .indicador {
+    background-color: #F0ECE1;
+}
+
+/* Indicador do Botão */
+
+.label .indicador {
+    background-color: #3a231a;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    height: 22px;
+    width: 22px;
+    transition: transform 0.2s linear;
+    /* transição do deslizamento do indicador */
+}
+
+
+/* Transição do Indicador (Bolinha Branca) */
+/* O sinal de "+" seleciona o elemento que vem LOGO APÓS o input (.label). */
+
+#botao-tema:checked+.label .indicador {
+    transform: translateX(24px);
+    /* o indicador desliza 24px para a direita */
+}
+
+/* Imagens do Botão  */
+
+.img-lua,
+.img-sol {
+    width: 16px;
+    height: 16px;
+}
+
+/* ÁREA LOGIN */
+
+#login {
+    flex: 1;
+
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+}
+
+/* FORMULÁRIO */
+
+.form {
+    color: var(--text-color);
+
+    background: var(--card-bg);
+
+    padding: 50px;
+
+    border-radius: 10px;
+
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+
+    width: 100%;
+    max-width: 500px;
+}
+
+/* LOGO */
+
+.logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.logo img {
+    height: 120px;
+}
+
+/* CAMPOS */
+
+#nome,
+#email,
+#senha,
+#Confirme_senha,
+#telefone {
+    margin-bottom: 7px;
+}
+
+label {
+    font-size: 12px;
+    margin-left: 5px;
+    margin-bottom: 3px;
+    display: block;
+}
+
+/* INPUTS */
+
+input {
+    width: 100%;
+
+    padding: 10px;
+
+    margin-top: 6px;
+
+    border: 1px solid var(--border-color);
+
+    border-radius: 6px;
+
+    background: var(--input-bg);
+
+    color: var(--text-color);
+}
+
+.tema-escuro input {
+    border: none;
+}
+
+input::placeholder {
+    color: var(--placeholder-color);
+}
+
+/* BOTÃO CADASTRAR */
+
+.btn-container {
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+
+    margin-top: 20px;
+    margin-bottom: 25px;
+}
+
+#button {
+    width: 100%;
+
+    padding: 12px;
+
+    border-radius: 8px;
+
+    background-color: var(--button-bg);
+
+    color: var(--button-text);
+
+    border: none;
+
+    font-weight: bold;
+    font-size: 15px;
+
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+#button:hover {
+    transform: scale(1.03);
+    background: var(--bottun-hover);
+}
+
+#button:active {
+    transform: scale(0.95);
+}
+
+/* LINK LOGIN */
+
+#link {
+    display: flex;
+    justify-content: center;
+
+    margin-top: -5px;
+
+    color: var(--text-color);
+
+    font-size: 14px;
+
+    font-family: 'Inter';
+
+    text-decoration: none;
+}
+
+#link:hover {
+    transform: scale(1.02);
+}
+
+/* RESPONSIVIDADE */
+
+@media (max-width: 600px) {
+    .form {
+        padding: 30px 20px;
+    }
+
+    .logo img
