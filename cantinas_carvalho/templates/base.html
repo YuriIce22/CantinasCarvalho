@@ -1,0 +1,58 @@
+<!-- A Base vai carregar os elementos header, botão de tema escuro/claro fontes....-->
+
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block titulo %}{% endblock %}</title>
+
+   <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo-autenticacao.css') }}">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap"
+          rel="stylesheet">
+</head>
+
+<body>
+
+<header>
+    <div class="topo">
+
+        <a href="/" class="voltar">
+            <i class="fa-solid fa-arrow-left"></i>
+        </a>
+
+        <!-- BOTÃO TEMA (GLOBAL PARAS AS TELAS SE LOGIN E CADASTROS) -->
+        <div class="btn">
+
+            <input type="checkbox"
+                   class="checkbox"
+                   id="botao-tema">
+
+            <label class="label" for="botao-tema">
+
+                <img src="{{ url_for('static', filename='img/sol.png') }}" class="img-sol">
+                <img src="{{ url_for('static', filename='img/lua.png') }}" class="img-lua">
+
+                <div class="indicador"></div>
+
+            </label>
+
+        </div>
+
+    </div>
+</header>
+
+<!-- CONTEÚDO DAS TELAS -->
+{% block conteudo %}
+{% endblock %}
+
+<script src="{{ url_for('static', filename='js/tema-autenticacao.js') }}"></script>
+
+</body>
+</html>

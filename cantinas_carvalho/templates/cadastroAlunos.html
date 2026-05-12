@@ -1,82 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastro Aluno</title>
-    <link rel="stylesheet" href="cadastroAlunos.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-</head>
+{% block titulo %}
+Cadastro Aluno
+{% endblock %}
 
-<body>
-    <header>
-        <div class="topo">
-            <a href="\" class="voltar">
-                <i class="fa-solid fa-arrow-left"></i>
-            </a>
+{% block conteudo %}
 
-            <div class="btn">
-                <input type="checkbox" class="checkbox" id="botao-tema" />
-                <label class="label" for="botao-tema">
-                    <img src="img/sol.png" alt="Sol" class="img-sol">
-                    <img src="img/lua.png" alt="Lua" class="img-lua">
-                    <div class="indicador"></div>
-                </label>
-            </div>
+<div id="login">
+
+    <form method="POST" class="form">
+
+        {{ form.hidden_tag() }}
+
+        <div class="logo">
+            <img src="{{ url_for('static', filename='img/Logo.png') }}">
         </div>
-    </header>
 
+        <label>Nome:</label>
+        {{ form.nome(id="nome", placeholder="Seu nome") }}
 
-    <div id="login">
-        <form class="form">
-            <div class="logo">
-                <img src="img/Logo.png" alt="Logo">
-            </div>
-            <div class="form-container">
-                <label for="nome">Nome:</label>
-                <div class="nome">
-                    <input type="text" id="nome" placeholder="Seu Nome" required>
-                </div>
+        <label>E-mail:</label>
+        {{ form.email(id="email", placeholder="Seu e-mail") }}
 
-                <label for="email">E-mail:</label>
-                <div class="email-icone">
-                    <input type="email" id="email" placeholder="Seu e-mail" required>
-                </div>
+        <label>Senha:</label>
+        {{ form.senha(id="senha", placeholder="Senha") }}
 
-                <label for="senha">Senha:</label>
-                <div class="nome">
-                    <input type="password" id="senha" placeholder="Senha" required>
-                </div>
+        <label>Confirmar senha:</label>
+        {{ form.confirm_senha(id="Confirme_senha", placeholder="Confirme") }}
 
-                <label for="nome">Confirme a senha:</label>
-                <div class="Confirme_senha ">
-                    <input type="password" id="Confirme_senha" placeholder="Confirme a sua senha" required>
-                </div>
+        <label>Telefone:</label>
+        {{ form.telefone(id="telefone", placeholder="Telefone") }}
 
-                <label for="nome">Telefone:</label>
-                <div class="Confirme_senha ">
-                    <input type="tel" id="telefone" placeholder="Digite o seu número" required>
-                </div>
+        <div class="btn-container">
+            {{ form.submit(class="button button-cadastro") }}
+        </div>
 
-            </div>
+        <a id="link" href="{{ url_for('login') }}">
+            Já possui conta?
+        </a>
 
-            <div class="btn-container">
-                <button id="button">CADASTRAR</button>
-            </div>
+    </form>
 
-            <a id="link" href="/login">Já possui uma conta?</a>
+</div>
 
-        </form>
-
-    </div>
-
-    <script src="cadastroAluno.js"></script>
-
-</body>
-
-</html>
+{% endblock %}

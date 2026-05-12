@@ -11,6 +11,20 @@ from cantinas_carvalho import app, bcrypt, db, mail
 from cantinas_carvalho.forms import ComumRegisterForm, FuncionarioRegisterForm, LoginForm, ProdutoForm
 from cantinas_carvalho.models import Usuario, UsuarioAluno, UsuarioFuncionario, ItemCardapio, Administrador, Categoria
 
+# =========================
+# HOME
+# =========================
+@app.route("/")
+def index():
+
+    # Busca todos os produtos
+    produtos = ItemCardapio.query.all()
+
+    return render_template(
+        "index.html",
+        produtos=produtos
+    )
+
 # Criação do @admin_required
 def admin_required(f):
     @wraps(f)
@@ -30,21 +44,6 @@ def admin_required(f):
         return f(*args, **kwargs)
 
     return decorated_function
-
-
-# =========================
-# HOME
-# =========================
-@app.route("/")
-def index():
-
-    # Busca todos os produtos
-    produtos = ItemCardapio.query.all()
-
-    return render_template(
-        "index.html",
-        produtos=produtos
-    )
 
 
 # =========================
@@ -132,7 +131,7 @@ def login():
     return render_template('login.html', form=login_form)
 
 @app.route('/esqueceuSenha', methods=['GET', 'POST']) # Aceita GET para abrir a página
-def esqueceuSenha(): # Mudei o nome da função para combinar com o seu url_for
+def esqueceuSenha():
     if request.method == 'POST':
         email_usuario = request.form.get('email')
         usuario = Usuario.query.filter_by(email=email_usuario).first()

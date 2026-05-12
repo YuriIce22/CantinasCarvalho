@@ -1,85 +1,180 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Cantina</title>
+  <meta charset="UTF-8">
+  <title>Cantinas Carvalho</title>
 
-    <style>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
 
-        body{
-            font-family: Arial;
-            background: #f4f4f4;
-            padding: 30px;
-        }
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        h1{
-            text-align: center;
-        }
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 
-        .container{
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-        }
-
-        .card{
-            background: white;
-            width: 250px;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px #ccc;
-        }
-
-        .card img{
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-            border-radius: 10px;
-        }
-
-        .preco{
-            color: green;
-            font-size: 22px;
-            font-weight: bold;
-        }
-
-    </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
+
 <body>
 
-    <h1>Cardápio da Cantina</h1>
+  <!-- HEADER -->
+  <header>
+    <div class="left">
 
-    <div class="container">
+      <div class="logo">
+        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
+      </div>
 
-        {% for produto in produtos %}
-
-            <div class="card">
-
-                {% if produto.imagem %}
-                    <img src="{{ url_for('static', filename='img/' + produto.imagem) }}">
-                {% else %}
-                    <img src="https://via.placeholder.com/250x180">
-                {% endif %}
-
-                <h2>{{ produto.nome }}</h2>
-
-                <p>{{ produto.descricao }}</p>
-
-                <p class="preco">
-                    R$ {{ produto.preco }}
-                </p>
-
-                <p>
-                    Estoque:
-                    {{ produto.quantidade_estoque }}
-                </p>
-
-            </div>
-
-        {% endfor %}
+      <nav>
+        <a href="#home">Início</a>
+        <a href="#sobre">Sobre</a>
+        <a href="#contato">Contato</a>
+      </nav>
 
     </div>
+
+    <div class="right">
+
+      <a href="{{ url_for('login') }}" class="login-menu">
+        <img src="{{ url_for('static', filename='img/user.png') }}" alt="User">
+        <span>Entrar</span>
+      </a>
+
+      <!-- BOTÃO TEMA -->
+      <div class="btn-tema">
+
+        <input type="checkbox" class="checkbox" id="botao-tema">
+
+        <label class="label" for="botao-tema">
+
+          <img src="{{ url_for('static', filename='img/sol.png') }}" alt="Sol" class="img-sol">
+
+          <img src="{{ url_for('static', filename='img/lua.png') }}" alt="Lua" class="img-lua">
+
+          <div class="indicador"></div>
+
+        </label>
+
+      </div>
+
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section id="home" class="hero">
+
+    <div class="hero-content">
+
+      <h1>Cantinas<br>Carvalho</h1>
+
+      <p>Onde o sabor encontra o carinho.</p>
+
+      <h2>
+        Refeições caseiras feitas com ingredientes<br>
+        selecionados e muito cuidado.
+      </h2>
+
+      <div class="buttons">
+
+        <a href="/cadastarAlunos" class="btn btn-primary">
+          <img src="{{ url_for('static', filename='img/user.png') }}" alt="">
+          Cadastrar Aluno
+        </a>
+
+        <a href="/cadastrarFuncionario" class="btn btn-primary">
+          <img src="{{ url_for('static', filename='img/user.png') }}" alt="">
+          Cadastrar Funcionário
+        </a>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- SOBRE -->
+  <section id="sobre" class="sobre">
+
+    <div class="sobre-text">
+
+      <h3>
+        <img src="{{ url_for('static', filename='img/icon-trigo.png') }}" alt="">
+        SOBRE NÓS
+      </h3>
+
+      <h2>Feito com tradição,<br>carinho e sabor.</h2>
+
+      <p>
+        A Cantinas Carvalho nasceu do amor pela culinária
+        caseira e do desejo de compartilhar refeições feitas
+        com ingredientes selecionados e muito cuidado.
+      </p>
+
+      <p>
+        Cada receita carrega nossa história, nosso compromisso
+        com a qualidade e o respeito por quem saboreia nossas
+        delícias.
+      </p>
+
+    </div>
+
+    <img src="{{ url_for('static', filename='img/img-cantina.png') }}" alt="Cantina">
+
+  </section>
+
+  <!-- CONTATO -->
+  <section id="contato" class="contato">
+
+    <div class="contato-topo">
+      <h3>CONTATO</h3>
+      <h2>Fale conosco</h2>
+    </div>
+
+    <div class="contato-grid">
+
+      <div class="contato-item">
+
+        <div class="contato-icon">
+          <img src="{{ url_for('static', filename='img/icon-whats.png') }}" alt="">
+        </div>
+
+        <h4>WhatsApp</h4>
+        <p>(11) 99999-9999</p>
+
+      </div>
+
+      <div class="contato-item">
+
+        <div class="contato-icon">
+          <img src="{{ url_for('static', filename='img/icon-email.png') }}" alt="">
+        </div>
+
+        <h4>E-mail</h4>
+        <p>contato@cantinascarvalho.com.br</p>
+
+      </div>
+
+      <div class="contato-item">
+
+        <div class="contato-icon">
+          <img src="{{ url_for('static', filename='img/icon-endereco.png') }}" alt="">
+        </div>
+
+        <h4>Endereço</h4>
+
+        <p>
+          Rua Jaguaré Mirim, 71 - Vila Leopoldina, São Paulo - SP
+        </p>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <footer>
+    ©2026 Cantinas Carvalho. Todos os direitos reservados.
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 </body>
 </html>

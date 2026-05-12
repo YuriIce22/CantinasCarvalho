@@ -1,71 +1,41 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="login.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+{% block titulo %}
+Login
+{% endblock %}
 
-</head>
+{% block conteudo %}
 
-<body>
+<div id="login">
 
-    <header>
-        <div class="topo">
-            <a href="/" class="voltar">
-                <i class="fa-solid fa-arrow-left"></i>
-            </a>
+    <form method="POST" class="form">
 
-            <div class="btn">
-                <input type="checkbox" class="checkbox" id="botao-tema" />
-                <label class="label" for="botao-tema">
-                    <img src="img/sol.png" alt="Sol" class="img-sol">
-                    <img src="img/lua.png" alt="Lua" class="img-lua">
-                    <div class="indicador"></div>
-                </label>
-            </div>
+        {{ form.hidden_tag() }}
+
+        <div class="logo">
+            <img src="{{ url_for('static', filename='img/Logo.png') }}">
         </div>
-    </header>
 
-    <div id="login">
-        <form class="form" method="POST" action="{{ url_for('login') }}">
-            {{ form.csrf_token }}>
-            <div class="logo">
-                <img src="img/Logo.png" alt="Logo">
-            </div>
-            <div class="form-container">
+        <label>E-mail:</label>
+        {{ form.email(id="email", placeholder="Seu e-mail") }}
 
-                <label for="email">E-mail:</label>
-                <div class="email-icone">
-                    <input type="email" id="email" placeholder="Seu e-mail" required>
-                </div>
+        <label>Senha:</label>
+        {{ form.password(id="senha", placeholder="Sua senha") }}
 
-                <label for="senha">Senha:</label>
-                <div class="nome">
-                    <input type="password" id="senha" placeholder="Senha" required>
-                </div>
+        <a id="link" href="#">
+            Esqueceu a senha?
+        </a>
 
-            </div>
+        <a id="link" href="{{ url_for('cadastrarAluno') }}">
+            Não tem conta?
+        </a>
 
-            <a id="link" href="{{ url_for('esqueceuSenha') }}">Esqueceu a sua senha?</a>
-            <a id="link" href="login.html">Ainda não tem conta?</a>
+        <div class="btn-container">
+           {{ form.submit(class="button button-login") }}
+        </div>
 
-            <div class="btn-container">
-                <button id="button">ENTRAR</button>
-            </div>
+    </form>
 
-        </form>
+</div>
 
-    </div>
-
-    <script src="login.js"></script>
-
-</body>
-
-</html>
+{% endblock %}
