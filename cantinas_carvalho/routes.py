@@ -130,33 +130,116 @@ def login():
 
     return render_template('login.html', form=login_form)
 
-@app.route('/esqueceuSenha', methods=['GET', 'POST']) # Aceita GET para abrir a página
+# =========================
+# REDEFINIR SENHA
+# =========================
+
+@app.route('/esqueceuSenha', methods=['GET', 'POST'])
 def esqueceuSenha():
+
+    etapa = session.get('etapa', 'email')
+
+    # ======================
+    # ETAPA EMAIL
+    # ======================
+
     if request.method == 'POST':
-        email_usuario = request.form.get('email')
-        usuario = Usuario.query.filter_by(email=email_usuario).first()
 
-        if usuario:
-            codigo = str(random.randint(1000, 9999))
-            session['codigo'] = codigo
-            session['email_usuario'] = usuario.id_usuario
+        # ENVIAR EMAIL
 
-            # Lógica de envio de e-mail (mantenha como estava)
-            email_mensagem = Message(
-                subject='Recuperação de Senha | Cantinas Carvalho',
-                sender=app.config['MAIL_USERNAME'],
-                recipients=[email_usuario]
-            )
-            email_mensagem.body = f"Olá, {usuario.nome}! Seu código de verificação é: {codigo}"
-            mail.send(email_mensagem)
+        if 'enviar_email' in request.form:
 
-            return "E-mail enviado com sucesso!"
-        else:
-            return "Este e-mail não está cadastrado!", 404
+            email = request.form.get('email')
 
-    # Se o método for GET (clicou no link), ele apenas abre a página
-    return render_template('RedefinirSenha.html')
+            usuario = Usuario.query.filter_by(email=email).first()
 
+            if usuario:
+
+                codigo = str(random.randint(1000, 9999))
+
+                session['codigo'] = codigo
+                session['usuario_id'] = usuario.id_usuario
+                session['etapa'] = 'codigo'
+
+                email_msg = Message(
+
+                    subject='Recuperação de Senha',
+
+                    sender=app.config['MAIL_USERNAME'],
+
+                    recipients=[email]
+                )
+
+                email_msg.body = f'''
+                    Seu código é:
+
+                    {codigo}
+                '''
+
+                mail.send(email_msg)
+
+                etapa = 'codigo'
+
+            else:
+
+                flash('E-mail não encontrado!')
+
+        # ======================
+        # VALIDAR CODIGO
+        # ======================
+
+        elif 'verificar_codigo' in request.form:
+
+            codigo_digitado = request.form.get('codigo')
+
+            if codigo_digitado == session.get('codigo'):
+
+                session['etapa'] = 'nova_senha'
+
+                etapa = 'nova_senha'
+
+            else:
+
+                flash('Código inválido!')
+
+                etapa = 'codigo'
+
+        # ======================
+        # NOVA SENHA
+        # ======================
+
+        elif 'alterar_senha' in request.form:
+
+            senha = request.form.get('senha')
+
+            confirmar = request.form.get('confirmar')
+
+            if senha != confirmar:
+
+                flash('As senhas não coincidem!')
+
+                etapa = 'nova_senha'
+
+            else:
+
+                usuario = Usuario.query.get(
+                    session.get('usuario_id')
+                )
+
+                usuario.senha_hash = generate_password_hash(senha)
+
+                db.session.commit()
+
+                session.clear()
+
+                flash('Senha alterada com sucesso!')
+
+                return redirect(url_for('login'))
+
+    return render_template(
+        'RedefinirSenha.html',
+        etapa=etapa
+    )
 @app.route('/cardapio')
 def cardapio():
     # Busca todos os itens cadastrados no banco de dados

@@ -171,6 +171,7 @@ class ItemCardapio(db.Model):
     disponivel = db.Column(db.Boolean, default=True)
     quantidade_estoque = db.Column(db.Integer, default=0)
     atualizado_em = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    imagem = db.Column(db.String(255))
 
     @validates('preco')
     def validar_preco(self, key, value):

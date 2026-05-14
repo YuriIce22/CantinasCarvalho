@@ -62,12 +62,6 @@ class LoginForm(FlaskForm):
     senha = PasswordField("Senha", validators=[DataRequired()])
     submit = SubmitField("Entrar")
 
-    def validate_email(self, email):
-        existing = Usuario.query.filter_by(email=email.data).first()
-        if existing:
-            raise ValidationError("E-mail já cadastrado.")
-
-
 class ProdutoForm(FlaskForm):
     nome = StringField('Nome', validators=[DataRequired(), Length(min=2, max=100)])
     descricao = TextAreaField('Descrição', validators=[DataRequired(), Length(min=2, max=300)])
@@ -88,3 +82,21 @@ class ProdutoForm(FlaskForm):
         if preco.data <= 0:
             raise ValidationError("O preço não pode ser menor que zero.")
         return None
+    
+class EsqueceSenhaForm(FlaskForm):
+    email = StringField('E-mail', validators=[DataRequired(), Email()])
+    Submit = SubmitField('Enviar Código')
+    
+class CodigoForm(FlaskForm):
+    Codigo = StringField('Código', validators=[DataRequired(), Length(min=4, max=4)])
+    Submit = SubmitField('Verificar Código')
+    
+class NovaSenhaForm(FlaskForm):
+    senha = PasswordField('Nova Senha', validators=[DataRequired(), Length(min=8, max=20) ])
+    confirmar_senha = PasswordField('Confirmar Senha', validators=[DataRequired(), EqualTo('senha')])
+    Submit = SubmitField('Alterar Senha')
+    
+    
+
+    
+    

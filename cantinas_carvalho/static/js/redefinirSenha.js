@@ -1,33 +1,160 @@
-// Selecionando os Containers Nomeados como class="container hidden"
+// TELAS
+
 const telaEmail = document.querySelector("#redefinir");
 const telaCodigo = document.querySelector("#cod");
 const telaNovaSenha = document.querySelector("#novaSenha");
 
-// Selecionando os Botões
-const btnEnviarEmail = document.querySelector(".botao");
-const btnVerificarCodigo = document.querySelector(".botaoCodigo");
+
+const formEmail = document.querySelector("#formEmail");
+const formCodigo = document.querySelector("#formCodigo");
+const formSenha = document.querySelector("#formSenha");
+
+// BOTÕES X
+
 const botoesFecharX = document.querySelectorAll(".botao-x");
 
-// 1. Mostrar tela de código e esconder a de email
-btnEnviarEmail.addEventListener("click", (e) => {
-    e.preventDefault(); // Evita que o <a> recarregue a página
-    telaCodigo.classList.remove("hidden");
-});
+// ==========================
+// ENVIAR EMAIL
+// ==========================
 
-// 2. Mostrar tela de nova senha e esconder a de código
-btnVerificarCodigo.addEventListener("click", (e) => {
+formEmail.addEventListener("submit", async (e) => {
+
     e.preventDefault();
-    telaCodigo.classList.add("hidden");
-    telaNovaSenha.classList.remove("hidden");
+
+    const email = document.querySelector("#email").value;
+
+    const resposta = await fetch("/esqueceuSenha", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            email: email
+        })
+
+    });
+
+    const dados = await resposta.json();
+
+    if (dados.status === "ok") {
+
+        telaEmail.classList.add("hidden");
+
+        telaCodigo.classList.remove("hidden");
+
+    } else {
+
+        alert(dados.mensagem);
+
+    }
+
 });
 
-// 3. Lógica dos botões de fechar (X) - Volta tudo para o início
-// Usamos o forEach porque existem vários botões com a classe .botao-x e, para não repetir o código para cada um (como fazer um addEventListener individual para o botaoFechar1, botaoFechar2, etc), aplicamos uma única lógica que funciona para todos os botões de fechar do sistema.
-botoesFecharX.forEach(btn => {
-    btn.addEventListener("click", (e) => {
-        e.preventDefault();
-        telaCodigo.classList.add("hidden");
-        telaNovaSenha.classList.add("hidden");
-        telaEmail.classList.remove("hidden");
+// ==========================
+// VERIFICAR CODIGO
+// ==========================
+
+formCodigo.addEventListener("submit", async (e) => {
+
+    e.preventDefault();
+
+    const codigo = document.querySelector("#codigo").value;
+
+    const resposta = await fetch("/verificarCodigo", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+            codigo: codigo
+        })
+
     });
+
+    const dados = await resposta.json();
+
+    if (dados.status === "ok") {
+
+        telaCodigo.classList.add("hidden");
+
+        telaNovaSenha.classList.remove("hidden");
+
+    } else {
+
+        alert(dados.mensagem);
+
+    }
+
+});
+
+// ==========================
+// ALTERAR SENHA
+// ==========================
+
+formSenha.addEventListener("submit", async (e) => {
+
+    e.preventDefault();
+
+    const senha = document.querySelector("#senha").value;
+
+    const confirmarSenha = document.querySelector("#confirmarSenha").value;
+
+    const resposta = await fetch("/novaSenha", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+
+            senha: senha,
+
+            confirmarSenha: confirmarSenha
+
+        })
+
+    });
+
+    const dados = await resposta.json();
+
+    if (dados.status === "ok") {
+
+        alert("Senha alterada com sucesso!");
+
+        window.location.href = "/login";
+
+    } else {
+
+        alert(dados.mensagem);
+
+    }
+
+});
+
+// ==========================
+// FECHAR
+// ==========================
+
+botoesFecharX.forEach(btn => {
+
+    btn.addEventListener("click", (e) => {
+
+        e.preventDefault();
+
+        telaCodigo.classList.add("hidden");
+
+        telaNovaSenha.classList.add("hidden");
+
+        telaEmail.classList.remove("hidden");
+
+    });
+
 });
