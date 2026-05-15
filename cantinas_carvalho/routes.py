@@ -1,5 +1,7 @@
 import os
 import random
+
+from flask_bcrypt import generate_password_hash
 from flask_mail import Message
 from functools import wraps
 
@@ -120,13 +122,15 @@ def cadastrarFuncionario():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     login_form = LoginForm()
+
     if login_form.validate_on_submit():
         usuario = Usuario.query.filter_by(email=login_form.email.data).first()
 
-        # Aqui a gente checa se o usuário existe e se a senha está certa
         if usuario and bcrypt.check_password_hash(usuario.senha_hash, login_form.senha.data):
-            login_user(usuario)  # ESTA LINHA É A CHAVE! Ela "loga" o usuário.
+            login_user(usuario)
             return redirect(url_for('cardapio'))
+        else:
+            flash('Email ou senha inválidos')
 
     return render_template('login.html', form=login_form)
 
@@ -137,17 +141,13 @@ def login():
 @app.route('/esqueceuSenha', methods=['GET', 'POST'])
 def esqueceuSenha():
 
-    etapa = session.get('etapa', 'email')
-
-    # ======================
-    # ETAPA EMAIL
-    # ======================
-
     if request.method == 'POST':
 
+        # ======================
         # ENVIAR EMAIL
+        # ======================
 
-        if 'enviar_email' in request.form:
+        if request.form.get('enviar_email'):
 
             email = request.form.get('email')
 
@@ -162,33 +162,38 @@ def esqueceuSenha():
                 session['etapa'] = 'codigo'
 
                 email_msg = Message(
-
                     subject='Recuperação de Senha',
-
-                    sender=app.config['MAIL_USERNAME'],
-
+                    sender=app.config['MAIL_DEFAULT_SENDER'],
                     recipients=[email]
                 )
 
                 email_msg.body = f'''
-                    Seu código é:
+Seu código é:
 
-                    {codigo}
+{codigo}
                 '''
 
                 mail.send(email_msg)
 
-                etapa = 'codigo'
+                return render_template(
+                    'RedefinirSenha.html',
+                    etapa='codigo'
+                )
 
             else:
 
                 flash('E-mail não encontrado!')
 
+                return render_template(
+                    'RedefinirSenha.html',
+                    etapa='email'
+                )
+
         # ======================
         # VALIDAR CODIGO
         # ======================
 
-        elif 'verificar_codigo' in request.form:
+        elif request.form.get('verificar_codigo'):
 
             codigo_digitado = request.form.get('codigo')
 
@@ -196,29 +201,37 @@ def esqueceuSenha():
 
                 session['etapa'] = 'nova_senha'
 
-                etapa = 'nova_senha'
+                return render_template(
+                    'RedefinirSenha.html',
+                    etapa='nova_senha'
+                )
 
             else:
 
                 flash('Código inválido!')
 
-                etapa = 'codigo'
+                return render_template(
+                    'RedefinirSenha.html',
+                    etapa='codigo'
+                )
 
         # ======================
-        # NOVA SENHA
+        # ALTERAR SENHA
         # ======================
 
-        elif 'alterar_senha' in request.form:
+        elif request.form.get('alterar_senha'):
 
             senha = request.form.get('senha')
-
             confirmar = request.form.get('confirmar')
 
             if senha != confirmar:
 
                 flash('As senhas não coincidem!')
 
-                etapa = 'nova_senha'
+                return render_template(
+                    'RedefinirSenha.html',
+                    etapa='nova_senha'
+                )
 
             else:
 
@@ -226,7 +239,9 @@ def esqueceuSenha():
                     session.get('usuario_id')
                 )
 
-                usuario.senha_hash = generate_password_hash(senha)
+                usuario.senha_hash = generate_password_hash(
+                    senha
+                ).decode('utf-8')
 
                 db.session.commit()
 
@@ -234,11 +249,11 @@ def esqueceuSenha():
 
                 flash('Senha alterada com sucesso!')
 
-                return redirect(url_for('login'))
+                return redirect('/login')
 
     return render_template(
         'RedefinirSenha.html',
-        etapa=etapa
+        etapa='email'
     )
 @app.route('/cardapio')
 def cardapio():

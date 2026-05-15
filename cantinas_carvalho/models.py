@@ -70,6 +70,9 @@ class Usuario(UserMixin, db.Model):
     criado_em = db.Column(db.DateTime,  default=lambda: datetime.now(timezone.utc))
     atualizado_em = db.Column(db.DateTime,  default=lambda: datetime.now(timezone.utc))
 
+    def get_id(self):
+        return str(self.id_usuario)
+
 
     @validates('email')
     def validar_email(self, key, value):

@@ -22,7 +22,7 @@ Login
         <label>Senha:</label>
         {{ form.senha(id="senha", placeholder="Sua senha") }}
 
-        <a id="link" href="#">
+        <a id="link" href="{{ url_for('esqueceuSenha') }}">
             Esqueceu a senha?
         </a>
 

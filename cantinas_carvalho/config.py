@@ -1,7 +1,7 @@
 DB_CONFIG = {
     "host": "localhost",
     "port": "5432",
-    "database": "cantinas",
+    "database": "cantinas_carvalho",
     "user": "app_admin",
-    "password": "admin"
+    "password": "1234"
 }
