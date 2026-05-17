@@ -113,6 +113,9 @@ def cadastrarFuncionario():
 
         return redirect(url_for('cardapio'))
 
+    else:
+        print("ERROS DO FORM:", register_form.errors)
+
     return render_template('cadastroFuncionario.html', form=register_form)
 
 
@@ -146,11 +149,9 @@ def esqueceuSenha():
         # ======================
         # ENVIAR EMAIL
         # ======================
-
         if request.form.get('enviar_email'):
 
             email = request.form.get('email')
-
             usuario = Usuario.query.filter_by(email=email).first()
 
             if usuario:
@@ -167,58 +168,41 @@ def esqueceuSenha():
                     recipients=[email]
                 )
 
-                email_msg.body = f'''
-Seu código é:
-
-{codigo}
-                '''
-
+                email_msg.body = f'Seu código é: {codigo}'
                 mail.send(email_msg)
 
-                return render_template(
-                    'RedefinirSenha.html',
-                    etapa='codigo'
-                )
+                return redirect(url_for('esqueceuSenha'))
 
             else:
 
                 flash('E-mail não encontrado!')
-
-                return render_template(
-                    'RedefinirSenha.html',
-                    etapa='email'
-                )
+                return redirect(url_for('esqueceuSenha'))
 
         # ======================
-        # VALIDAR CODIGO
+        # VALIDAR CÓDIGO
         # ======================
-
         elif request.form.get('verificar_codigo'):
 
-            codigo_digitado = request.form.get('codigo')
+            codigo_digitado = (
+                request.form.get('c1', '') +
+                request.form.get('c2', '') +
+                request.form.get('c3', '') +
+                request.form.get('c4', '')
+            )
 
             if codigo_digitado == session.get('codigo'):
 
                 session['etapa'] = 'nova_senha'
-
-                return render_template(
-                    'RedefinirSenha.html',
-                    etapa='nova_senha'
-                )
+                return redirect(url_for('esqueceuSenha'))
 
             else:
 
                 flash('Código inválido!')
-
-                return render_template(
-                    'RedefinirSenha.html',
-                    etapa='codigo'
-                )
+                return redirect(url_for('esqueceuSenha'))
 
         # ======================
         # ALTERAR SENHA
         # ======================
-
         elif request.form.get('alterar_senha'):
 
             senha = request.form.get('senha')
@@ -227,34 +211,36 @@ Seu código é:
             if senha != confirmar:
 
                 flash('As senhas não coincidem!')
+                return redirect(url_for('esqueceuSenha'))
 
-                return render_template(
-                    'RedefinirSenha.html',
-                    etapa='nova_senha'
-                )
+            usuario = Usuario.query.get(session.get('usuario_id'))
 
-            else:
+            if usuario:
 
-                usuario = Usuario.query.get(
-                    session.get('usuario_id')
-                )
-
-                usuario.senha_hash = generate_password_hash(
-                    senha
-                ).decode('utf-8')
-
+                usuario.senha_hash = generate_password_hash(senha).decode('utf-8')
                 db.session.commit()
 
                 session.clear()
 
                 flash('Senha alterada com sucesso!')
-
                 return redirect('/login')
 
-    return render_template(
-        'RedefinirSenha.html',
-        etapa='email'
-    )
+            else:
+
+                flash('Usuário não encontrado!')
+                return redirect(url_for('login'))
+
+    # ======================
+    # GET (ÚNICA FONTE DA ETAPA)
+    # ======================
+    etapa = session.get('etapa', 'email')
+
+    return render_template('RedefinirSenha.html', etapa=etapa)
+
+# =========================
+# CARDÁPIO
+# =========================
+
 @app.route('/cardapio')
 def cardapio():
     # Busca todos os itens cadastrados no banco de dados

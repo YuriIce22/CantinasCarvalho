@@ -33,10 +33,10 @@ class ComumRegisterForm(FlaskForm):
 
 
 class FuncionarioRegisterForm(FlaskForm):
-    nome = StringField('Nome do Usuário', validators=[DataRequired(), Length(min=2, max=20)])
+    nome = StringField('Nome do Usuário', validators=[DataRequired(), Length(min=2, max=100)])
     email = StringField('Email', validators=[DataRequired(), Email()])
-    senha = PasswordField('Senha', validators=[DataRequired(), Length(min=8, max=20)])
-    confirm_senha = PasswordField('', validators=[DataRequired(), EqualTo('senha')])
+    senha = PasswordField('Senha', validators=[DataRequired()])
+    confirm_senha = PasswordField('Confirmar senha',validators=[DataRequired(), EqualTo('senha')])
     telefone = StringField('Telefone', validators=[DataRequired()])
     nif = StringField('NIF', validators=[DataRequired(), Length(min=7, max=7)])
     submit = SubmitField('Cadastrar')
@@ -52,8 +52,8 @@ class FuncionarioRegisterForm(FlaskForm):
             raise ValidationError("E-mail já cadastrado.")
 
     def validate_nif(self, nif):
-        nif = UsuarioFuncionario.query.filter_by(nif=nif.data).first()
-        if nif:
+        existing = UsuarioFuncionario.query.filter_by(nif=nif.data).first()
+        if existing:
             raise ValidationError("NIF já cadastrado!")
 
 
