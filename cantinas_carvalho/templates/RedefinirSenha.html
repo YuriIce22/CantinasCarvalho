@@ -13,20 +13,9 @@
 
         <form method="POST">
 
-            <input
-                class="email"
-                type="email"
-                name="email"
-                placeholder="Digite o seu e-mail"
-                required
-            >
+            <input class="email" type="email" name="email" placeholder="Digite o seu e-mail" required>
 
-            <button
-                type="submit"
-                name="enviar_email"
-                value="1"
-                class="botao"
-            >
+            <button type="submit" name="enviar_email" value="1" class="botao">
                 Enviar o código
             </button>
 
@@ -56,12 +45,7 @@
 
             </div>
 
-            <button
-                type="submit"
-                name="verificar_codigo"
-                value="1"
-                class="botaoCodigo"
-            >
+            <button type="submit" name="verificar_codigo" value="1" class="botaoCodigo">
                 Verificar o código
             </button>
 
@@ -84,41 +68,26 @@
         <h3>Sua nova senha deve conter:</h3>
 
         <ul>
-            <li>No mínimo 8 caracteres</li>
-            <li>Pelo menos uma letra maiúscula</li>
-            <li>Pelo menos uma letra minúscula</li>
-            <li>Pelo menos um número</li>
-            <li>Pelo menos um caractere especial</li>
+            <li>Sua senha deve conter no mínimo 8 caracteres</li>
+            <li>Deve incluir pelo menos uma letra maiúscula (A–Z)</li>
+            <li>Deve incluir pelo menos uma letra minúscula (a–z)</li>
+            <li>Deve conter pelo menos um número (0–9)</li>
+            <li>Evite usar informações pessoais (nome, data de nascimento, etc.)</li>
+            <li>Não utilize senhas fáceis ou sequências (ex: 123456, abc123)</li>
+            <li>Não reutilize senhas já usadas anteriormente</li>
         </ul>
 
         <form method="POST">
 
             <p>Nova senha:</p>
 
-            <input
-                class="email"
-                type="password"
-                name="senha"
-                placeholder="Digite a sua nova senha"
-                required
-            >
+            <input class="email" type="password" name="senha" placeholder="Digite a sua nova senha" required>
 
             <p>Confirme a sua nova senha:</p>
 
-            <input
-                class="email"
-                type="password"
-                name="confirmar"
-                placeholder="Confirme a sua nova senha"
-                required
-            >
+            <input class="email" type="password" name="confirmar" placeholder="Confirme a sua nova senha" required>
 
-            <button
-                type="submit"
-                name="alterar_senha"
-                value="1"
-                class="botao"
-            >
+            <button type="submit" name="alterar_senha" value="1" class="botao">
                 Alterar a senha
             </button>
 

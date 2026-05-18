@@ -1,7 +1,6 @@
-const botao = document.querySelector("#botao-tema")
+const botao = document.querySelector("#botao-tema");
+const body = document.querySelector("body");
 
-if (botao) {
-    botao.addEventListener("click", () => {
-        body.classList.toggle("tema-escuro");
-    });
-}
+botao.addEventListener("click", () => {
+    body.classList.toggle("tema-escuro");
+});

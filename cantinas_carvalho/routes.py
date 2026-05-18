@@ -141,8 +141,21 @@ def login():
         usuario = Usuario.query.filter_by(email=login_form.email.data).first()
 
         if usuario and bcrypt.check_password_hash(usuario.senha_hash, login_form.senha.data):
-            login_user(usuario)
-            return redirect(url_for('cardapio'))
+
+            admin = Administrador.query.filter_by(id_usuario=usuario.id_usuario).first()
+            if admin:
+                login_user(usuario)
+                return redirect(url_for('cardapio'))
+
+            funcionario = UsuarioFuncionario.query.filter_by(id_usuario=usuario.id_usuario).first()
+            if funcionario:
+                login_user(usuario)
+                return redirect(url_for('cardapio'))
+
+            aluno = UsuarioAluno.query.filter_by(id_usuario=usuario.id_usuario).first()
+            if aluno:
+                login_user(usuario)
+                return redirect(url_for('cardapio'))
         else:
             flash('Email ou senha inválidos')
 

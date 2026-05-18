@@ -1,47 +1,55 @@
-:root{
-    --fundo: #F6F1E6;
-    --fonte: #652A0E;
-    --botao: #652A0E;
-    --hover: #52230d;
-    --fonte-botap: #F6F1E6;
-    --botao-seta: #652A0E;
-    --botao-seta-hover: #52230d;
-    --fundo-tema: #e3d4ba;
+:root {
+    --font-main: 'Inter', sans-serif;
+    --bg-color: #F6F1E6;
+    --card-bg: #F0ECE1;
+    --input-bg: #F2EAD8;
+    --button-bg: #652A0E;
+    --button-text: #FFFFFF;
+    --text-color: #652A0E;
+    --placeholder-color: #CEBF9D;
+    --border-color: #ccc;
+    --botao-hover: #3d1706;
+    --btn-toggle-bg: #e3d4ba;
     --indicador: #3a231a;
 }
 
 .tema-escuro {
-    --fundo: #1A110E;
-    --fonte: #F0ECE1;
-    --botao: #2c1e1a;
-    --hover: #362520;
-    --botao-seta: #F0ECE1;
-    --botao-seta-hover: #c2b591;
-    --fundo-tema: #3a231a;
+    --bg-color: #1A110E;
+    --card-bg: #2D1D17;
+    --input-bg: #402820;
+    --button-bg: #F0ECE1;
+    --button-text: #371707;
+    --text-color: #F0ECE1;
+    --placeholder-color: #F0ECE1;
+    --border-color: #5a3a2f;
+    --btn-toggle-bg: #3a231a;
+    --botao-hover: #d6caa8;
     --indicador: #F0ECE1;
-}
-
-body{
-    margin: 0;
-    padding: 0;
-    background-color: var(--fundo);
-    color: var(--fonte);
-    font-family: 'Inter';
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100vh;
-}
-
-header {
-    width: 100%;
 }
 
 * {
     box-sizing: border-box;
 }
 
-/* Essa classe é essencial para o JS funcionar, serve para o comando de ocultar um elemento no JS*/
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-main);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -20px;
+    height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+header {
+    width: 100%;
+}
+
+/* Essa classe serve para o comando de ocultar elementos no JS */
 .hidden {
     display: none !important;
 }
@@ -50,33 +58,31 @@ header {
     display: flex;
     align-items: center;
     padding: 20px;
+    width: 100%;
 }
 
-.btn {
-    margin-left: auto;
-}
-
+/* Botão Voltar (Seta da Base) */
 .voltar {
     font-size: 20px;
-    color: var(--botao-seta);
+    color: var(--button-bg);
     background: transparent;
     border: none;
-    transition: transform 0.2s ease, background-color 0.2s ease;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
 }
 
 .voltar:hover {
-    color: var(--botao-seta-hover);
-    cursor: pointer;
+    color: var(--botao-hover);
     transform: scale(1.05);
 }
 
+/* Switch de Tema (Botão Sol/Lua) */
 .btn {
     position: absolute;
     top: 20px;
     right: 20px;
+    z-index: 10;
 }
-
-/* checkbox do Botão */
 
 .checkbox {
     opacity: 0;
@@ -84,7 +90,7 @@ header {
 }
 
 .label {
-    background-color: var(--fundo-tema);
+    background-color: var(--btn-toggle-bg);
     border-radius: 50px;
     cursor: pointer;
     display: flex;
@@ -95,11 +101,7 @@ header {
     height: 26px;
     width: 50px;
     transform: scale(1.5);
-
-}
-
-.tema-escuro .label {
-    background-color: var(--fundo-tema);
+    transition: background-color 0.3s ease;
 }
 
 .label .indicador {
@@ -110,105 +112,146 @@ header {
     left: 2px;
     height: 22px;
     width: 22px;
-    transition: transform 0.2s linear;
+    transition: transform 0.2s linear, background-color 0.3s ease;
 }
 
-#botao-tema:checked+.label .indicador {
+#botao-tema:checked + .label .indicador {
     transform: translateX(24px);
 }
 
-/* Imagens do Botão  */
-
-.img-lua,
-.img-sol {
+.img-lua, .img-sol {
     width: 16px;
     height: 16px;
 }
 
-.container{
-    margin: 20px;
-    padding: 20px;
-    max-width: 900px;
-    width: 100%;
-    box-shadow: 0 14px 14px rgba(0, 0, 0, 0.2);
+/* CONTAINER DE REDEFINIÇÃO DE SENHA / LOGIN */
+.container {
+    margin: auto 20px;
+    padding: 40px;
+    max-width: 700px;
+    width: calc(100% - 40px);
+    background-color: var(--card-bg);
+    box-shadow: 0 14px 14px rgba(0, 0, 0, 0.15);
     border-radius: 15px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.container h1{
+.container h1 {
     font-size: 28px;
     margin-bottom: 20px;
+    text-align: center;
 }
 
-.container p{
-    margin-top: 50px;
-    font-size: 12px;
-    display: flex;
-    margin-left: 110px;
+.container h3 {
+    font-size: 16px;
+    margin-top: 20px;
 }
 
-.container .email{
+.container ul {
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+.container p {
+    margin-top: 25px;
+    font-size: 13px;
     display: block;
-    padding: 8px;
-    background-color: var(--fundo);
-    border: none;
+    margin-left: 15px; /* Margem padrão do parágrafo */
+    font-weight: bold;
+}
+.container .email {
+    display: block;
+    padding: 12px;
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
     border-radius: 8px;
-    box-shadow: 0 14px 14px rgba(0, 0, 0, 0.2);
-    width: 650px;
-    margin: 0 auto;
+    width: 100%;
+    max-width: 575px;
+
+    /* Alterado de 'margin: 0 auto 15px auto' para alinhar à esquerda com o <p> */
+    margin: 8px 0 20px 15px;
+
+    outline: none;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-.container .botao, .botaoCodigo{
+.container .email::placeholder {
+    color: var(--placeholder-color);
+}
+
+body.tema-escuro .container .email {
+    border: 1px solid transparent;
+}
+
+.container .botao, .botaoCodigo {
     text-decoration: none;
     margin: 30px auto 0 auto;
     border: none;
-    box-shadow: 0 14px 14px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
     border-radius: 8px;
-    background-color: var(--botao);
-    color: var(--fonte-botap);
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    font-weight: bold;
+    font-size: 15px;
     transition: transform 0.2s ease, background-color 0.2s ease;
     display: block;
-    padding: 8px;
-    width: 650px;
+    padding: 12px;
+    width: 100%;
+    max-width: 400px;
     text-align: center;
-}
-
-.container .botao:hover{
-    background-color: var(--hover);
     cursor: pointer;
-    transform: scale(1.05);
 }
 
+.container .botao:hover, .botaoCodigo:hover {
+    background-color: var(--botao-hover);
+    transform: scale(1.03);
+}
+
+.container .botao:active, .botaoCodigo:active {
+    transform: scale(0.97);
+}
+
+/* Inputs de 4 dígitos do código de confirmação */
 .cod {
-    margin-top: 20px;
-    width: 80px;
-    height: 80px;
+    width: 90px;
+    height: 90px;
     text-align: center;
     border-radius: 12px;
-    border: none;
-    background-color: var(--fonte-botap);
-    box-shadow: 0 14px 14px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    background-color: var(--input-bg);
+    color: var(--text-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     font-size: 24px;
-    line-height: 80px;
+    font-weight: bold;
+    outline: none;
+    transition: background-color 0.3s ease;
 }
 
-.codigo{
-   display: flex;
+body.tema-escuro .cod {
+    border: 1px solid transparent;
+}
+
+.codigo {
+    display: flex;
     justify-content: center;
     align-items: center;
-    gap: 50px;
+    gap: 20px;
 }
 
-.container .botao-x{
+/* Botão Fechar / Voltar (X) */
+.container .botao-x {
     display: inline-block;
     text-decoration: none;
     font-weight: 900;
-    color: var(--fonte);
+    font-size: 18px;
+    color: var(--text-color);
     float: right;
-    transition: transform 0.2s ease, background-color 0.2s ease;
+    transition: transform 0.2s ease, color 0.2s ease;
 }
 
-.container .botao-x:hover{
-   color: var(--hover);
-    cursor: pointer;
+.container .botao-x:hover {
+    color: var(--botao-hover);
     transform: scale(1.2);
 }

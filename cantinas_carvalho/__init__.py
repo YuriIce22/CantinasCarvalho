@@ -13,7 +13,7 @@ app = Flask(__name__)
 # ======================
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY", "dev-secret")
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:1229@localhost:5432/cantinas_carvalho'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:admin@localhost:5432/cantinas_carvalho'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # EMAIL
