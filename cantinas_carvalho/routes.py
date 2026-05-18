@@ -22,10 +22,7 @@ def index():
     # Busca todos os produtos
     produtos = ItemCardapio.query.all()
 
-    return render_template(
-        "index.html",
-        produtos=produtos
-    )
+    return render_template("index.html",produtos=produtos)
 
 # Criação do @admin_required
 def admin_required(f):
@@ -77,7 +74,7 @@ def cadastrarAluno():
 
         return redirect(url_for('cardapio'))
 
-    return render_template('cadastroAlunos.html', form=register_form)
+    return render_template('cardapio/cadastroAlunos.html', form=register_form)
 
 
 # =========================
@@ -159,7 +156,7 @@ def login():
         else:
             flash('Email ou senha inválidos')
 
-    return render_template('login.html', form=login_form)
+    return render_template('login/login.html', form=login_form)
 
 # =========================
 # REDEFINIR SENHA
@@ -192,7 +189,7 @@ def esqueceuSenha():
                     recipients=[email]
                 )
 
-                email_msg.html = render_template('email.html', codigo=codigo)
+                email_msg.html = render_template('login/email.html', codigo=codigo)
 
                 mail.send(email_msg)
 
@@ -260,7 +257,7 @@ def esqueceuSenha():
     # ======================
     etapa = session.get('etapa', 'email')
 
-    return render_template('RedefinirSenha.html', etapa=etapa)
+    return render_template('login/RedefinirSenha.html', etapa=etapa)
 
 # =========================
 # CARDÁPIO
@@ -270,62 +267,199 @@ def esqueceuSenha():
 def cardapio():
     # Busca todos os itens cadastrados no banco de dados
     itens = ItemCardapio.query.all()
-    return render_template('cardapio.html', itens=itens)
+    return render_template('cardapio/cardapio.html', itens=itens)
 
 
 # =========================
 # TELA ADMIN
 # =========================
-# @app.route('/admin')
-# @login_required
-# @admin_required
+@app.route('/admin')
+@login_required
+@admin_required
+def telaAdmin():
+
+    produtos = ItemCardapio.query.order_by(ItemCardapio.id_item_cardapio.desc()).all()
+
+    total_produtos = ItemCardapio.query.count()
+
+    produtos_disponiveis = ItemCardapio.query.filter_by(disponivel=True).count()
+
+    produtos_indisponiveis = ItemCardapio.query.filter_by(disponivel=False).count()
+
+    return render_template(
+        'admin/produtos.html',
+        produtos=produtos,
+        total_produtos=total_produtos,
+        produtos_disponiveis=produtos_disponiveis,
+        produtos_indisponiveis=produtos_indisponiveis,
+        admin_nome=current_user.nome
+    )
 
 
 
 
-#=========================
-# CADASTRAR PRODUTO
-# =========================
 @app.route('/admin/cadastrarProduto', methods=['GET', 'POST'])
 @login_required
 @admin_required
 def cadastrarProduto():
 
-    # Pegando as categorias do banco e o formulario de produto
     produtoForm = ProdutoForm()
     categorias = Categoria.query.all()
+    produtoForm.categoria.choices = [(categoria.id_categoria, categoria.nome) for categoria in categorias]
 
-    produtoForm.categoria.choices = [
-        (categoria.id_categoria, categoria.nome)
-        for categoria in categorias
-    ]
-
-    # Cadastro do produto
     if produtoForm.validate_on_submit():
+        nome_arquivo = None
 
-        # Pegando e salvando imagem
-        imagem = produtoForm.imagem.data
-        nome_arquivo = secure_filename(imagem.filename)
+        if produtoForm.imagem.data:
 
-        caminho_imagem = os.path.join(app.root_path, 'static/img', nome_arquivo)
+            imagem = produtoForm.imagem.data
 
-        imagem.save(caminho_imagem)
+            # EXTENSÃO DA IMAGEM
+            extensao = os.path.splitext(secure_filename(imagem.filename))[1]
 
-        # Cadastrando novo produto
+            # NOME BASE VINDO DO CAMPO "nome"
+            nome_base = secure_filename(produtoForm.nome.data.lower().replace(' ', '_'))
+
+            pasta_upload = os.path.join(app.root_path,'static/img/produtosImg')
+
+            os.makedirs(pasta_upload, exist_ok=True)
+
+            # NOME INICIAL
+            nome_arquivo = f'{nome_base}{extensao}'
+            caminho_imagem = os.path.join(pasta_upload, nome_arquivo)
+            contador = 1
+
+            # VERIFICA SE JÁ EXISTE
+            while os.path.exists(caminho_imagem):
+
+                nome_arquivo = f'{nome_base}_{contador}{extensao}'
+                caminho_imagem = os.path.join(pasta_upload, nome_arquivo)
+                contador += 1
+
+            imagem.save(caminho_imagem)
+
         novo_produto = ItemCardapio(
             nome=produtoForm.nome.data,
             descricao=produtoForm.descricao.data,
             preco=produtoForm.preco.data,
             quantidade_estoque=produtoForm.quantidade_estoque.data,
-            categoria_id=produtoForm.categoria.data,
-            imagem=nome_arquivo
+            id_categoria=produtoForm.categoria.data,
+            imagem=nome_arquivo,
+            disponivel=True
         )
 
         db.session.add(novo_produto)
         db.session.commit()
 
-        flash('Produto cadastrado com sucesso.', 'success')
-
+        flash('Produto cadastrado com sucesso!', 'success')
         return redirect(url_for('telaAdmin'))
 
-    return render_template('telaAdmin.html', form=produtoForm)
+    return render_template('admin/cadastrarProduto.html', form=produtoForm)
+
+# =========================
+# PEDIDOS ADMIN
+# =========================
+@app.route('/admin/pedidos')
+@login_required
+@admin_required
+def pedidoAdmin():
+
+    pedidos = Pedido.query.order_by(Pedido.id_pedido.desc()).all()
+
+    total_pedidos = Pedido.query.count()
+
+    pedidos_pendentes = Pedido.query.filter_by(status='pendente').count()
+
+    pedidos_entregues = Pedido.query.filter_by(status='entregue').count()
+
+    pedidos_cancelados = Pedido.query.filter_by(status='cancelado').count()
+
+    return render_template(
+        'admin/pedidos.html',
+
+        pedidos=pedidos,
+        total_pedidos=total_pedidos,
+        pedidos_pendentes=pedidos_pendentes,
+        pedidos_entregues=pedidos_entregues,
+        pedidos_cancelados=pedidos_cancelados,
+        admin_nome=current_user.nome
+    )
+
+
+# =========================
+# ALTERAR STATUS PEDIDO
+# =========================
+@app.route('/admin/pedido/<int:id_pedido>/status/<string:novo_status>')
+@login_required
+@admin_required
+def alterarStatusPedido(id_pedido, novo_status):
+
+    pedido = Pedido.query.get_or_404(id_pedido)
+
+    pedido.status = novo_status
+
+    db.session.commit()
+
+    flash('Status do pedido atualizado!', 'success')
+
+    return redirect(url_for('pedidoAdmin'))
+
+
+# =========================
+# RELATÓRIOS ADMIN
+# =========================
+@app.route('/admin/relatorios')
+@login_required
+@admin_required
+def relatorioAdmin():
+
+    faturamento_total = db.session.query(func.sum(Pedido.valor_pedido)).filter(Pedido.status == 'entregue').scalar() or 0
+
+    total_pedidos = Pedido.query.count()
+
+    total_produtos = ItemCardapio.query.count()
+
+    total_usuarios = Usuario.query.count()
+
+    pedidos_entregues = Pedido.query.filter_by(status='entregue').count()
+
+    pedidos_pendentes = Pedido.query.filter_by(status='pendente').count()
+
+    return render_template(
+        'admin/relatorios.html',
+
+        faturamento_total=faturamento_total,
+        total_pedidos=total_pedidos,
+        total_produtos=total_produtos,
+        total_usuarios=total_usuarios,
+        pedidos_entregues=pedidos_entregues,
+        pedidos_pendentes=pedidos_pendentes,
+        admin_nome=current_user.nome
+    )
+
+
+# =========================
+# USUÁRIOS ADMIN
+# =========================
+@app.route('/admin/usuarios')
+@login_required
+@admin_required
+def usuarioAdmin():
+
+    usuarios = Usuario.query.order_by(Usuario.id_usuario.desc()).all()
+
+    total_usuarios = Usuario.query.count()
+    total_alunos = UsuarioAluno.query.count()
+    total_funcionarios = UsuarioFuncionario.query.count()
+    total_admins = Administrador.query.count()
+
+    return render_template(
+        'admin/usuarios.html',
+
+        usuarios=usuarios,
+        total_usuarios=total_usuarios,
+        total_alunos=total_alunos,
+        total_funcionarios=total_funcionarios,
+        total_admins=total_admins,
+        admin_nome=current_user.nome
+    )
