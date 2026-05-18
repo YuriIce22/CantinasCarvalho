@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+Cadastro Aluno
+{% endblock %}
+
+{% block conteudo %}
+
+<div id="login">
+
+    <form method="POST" class="form">
+
+        {{ form.hidden_tag() }}
+
+        <div class="logo">
+            <img src="{{ url_for('static', filename='img/Logo.png') }}">
+        </div>
+
+        <label>Nome:</label>
+        {{ form.nome(id="nome", placeholder="Seu nome") }}
+
+        <label>E-mail:</label>
+        {{ form.email(id="email", placeholder="Seu e-mail") }}
+
+        <label>Senha:</label>
+        {{ form.senha(id="senha", placeholder="Senha") }}
+
+        <label>Confirmar senha:</label>
+        {{ form.confirm_senha(id="Confirme_senha", placeholder="Confirme") }}
+
+        <label>Telefone:</label>
+        {{ form.telefone(id="telefone", placeholder="Telefone") }}
+
+        <div class="btn-container">
+            {{ form.submit(class="button button-cadastro") }}
+        </div>
+
+        <a id="link" href="{{ url_for('login') }}">
+            Já possui conta?
+        </a>
+
+    </form>
+
+</div>
+
+{% endblock %}

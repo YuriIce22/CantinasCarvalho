@@ -1,0 +1,100 @@
+{% extends 'base.html' %} {% block titulo %}Cantinas Carvalho | Esqueceu a senha{% endblock %}
+
+{% block conteudo %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/redefinirSenha.css') }}">
+
+    {% if etapa == 'email' %}
+
+    <div class="container" id="redefinir">
+
+        <h1>Redefinição de senha</h1>
+
+        <p>Digite o email que você cadastrou na sua conta:</p>
+
+        <form method="POST">
+
+            <input class="email" type="email" name="email" placeholder="Digite o seu e-mail" required>
+
+            <button type="submit" name="enviar_email" value="1" class="botao">
+                Enviar o código
+            </button>
+
+        </form>
+
+    </div>
+
+    {% endif %}
+
+    {% if etapa == 'codigo' %}
+
+    <div class="container" id="cod">
+
+        <a href="{{ url_for('esqueceuSenha') }}" class="botao-x">
+            X
+        </a>
+
+        <h1>Confirmação de código</h1>
+
+        <form method="POST">
+
+            <div class="codigo">
+                <input name="c1" maxlength="1" class="cod">
+                <input name="c2" maxlength="1" class="cod">
+                <input name="c3" maxlength="1" class="cod">
+                <input name="c4" maxlength="1" class="cod">
+
+            </div>
+
+            <button type="submit" name="verificar_codigo" value="1" class="botaoCodigo">
+                Verificar o código
+            </button>
+
+        </form>
+
+    </div>
+
+    {% endif %}
+
+    {% if etapa == 'nova_senha' %}
+
+    <div class="container" id="novaSenha">
+
+        <a href="{{ url_for('esqueceuSenha') }}" class="botao-x">
+            X
+        </a>
+
+        <h1>Nova senha</h1>
+
+        <h3>Sua nova senha deve conter:</h3>
+
+        <ul>
+            <li>Sua senha deve conter no mínimo 8 caracteres</li>
+            <li>Deve incluir pelo menos uma letra maiúscula (A–Z)</li>
+            <li>Deve incluir pelo menos uma letra minúscula (a–z)</li>
+            <li>Deve conter pelo menos um número (0–9)</li>
+            <li>Evite usar informações pessoais (nome, data de nascimento, etc.)</li>
+            <li>Não utilize senhas fáceis ou sequências (ex: 123456, abc123)</li>
+            <li>Não reutilize senhas já usadas anteriormente</li>
+        </ul>
+
+        <form method="POST">
+
+            <p>Nova senha:</p>
+
+            <input class="email" type="password" name="senha" placeholder="Digite a sua nova senha" required>
+
+            <p>Confirme a sua nova senha:</p>
+
+            <input class="email" type="password" name="confirmar" placeholder="Confirme a sua nova senha" required>
+
+            <button type="submit" name="alterar_senha" value="1" class="botao">
+                Alterar a senha
+            </button>
+
+        </form>
+
+    </div>
+
+    {% endif %}
+
+{% endblock %}
