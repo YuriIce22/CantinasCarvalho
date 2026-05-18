@@ -1,54 +1,7 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+{% extends 'base.html' %} {% block titulo %}Cantinas Carvalho | Esqueceu a senha{% endblock %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-    <link rel="stylesheet"
-        href="{{ url_for('static', filename='css/redefinirSenha.css') }}">
-
-    <title>Cantinas Carvalho | Esqueceu a senha</title>
-</head>
-
-<body>
-
-    <header>
-
-        <div class="topo">
-
-            <a href="/login" class="voltar">
-                <i class="fa-solid fa-arrow-left"></i>
-            </a>
-
-            <div class="btn">
-
-                <input type="checkbox" class="checkbox" id="botao-tema" />
-
-                <label class="label" for="botao-tema">
-
-                    <img src="{{ url_for('static', filename='img/sol.png') }}" class="sol">
-
-                    <img src="{{ url_for('static', filename='img/lua.png') }}" class="lua">
-
-                    <div class="indicador"></div>
-
-                </label>
-
-            </div>
-
-        </div>
-
-    </header>
-
-    <!-- ========================= -->
-    <!-- TELA EMAIL -->
-    <!-- ========================= -->
+{% block conteudo %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/redefinirSenha.css') }}">
 
     {% if etapa == 'email' %}
 
@@ -82,10 +35,6 @@
     </div>
 
     {% endif %}
-
-    <!-- ========================= -->
-    <!-- TELA CÓDIGO -->
-    <!-- ========================= -->
 
     {% if etapa == 'codigo' %}
 
@@ -121,10 +70,6 @@
     </div>
 
     {% endif %}
-
-    <!-- ========================= -->
-    <!-- TELA NOVA SENHA -->
-    <!-- ========================= -->
 
     {% if etapa == 'nova_senha' %}
 
@@ -183,6 +128,4 @@
 
     {% endif %}
 
-</body>
-
-</html>
+{% endblock %}

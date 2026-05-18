@@ -36,11 +36,12 @@ class FuncionarioRegisterForm(FlaskForm):
     nome = StringField('Nome do Usuário', validators=[DataRequired(), Length(min=2, max=100)])
     email = StringField('Email', validators=[DataRequired(), Email()])
     senha = PasswordField('Senha', validators=[DataRequired()])
-    confirm_senha = PasswordField('Confirmar senha',validators=[DataRequired(), EqualTo('senha')])
+    confirm_senha = PasswordField('Confirmar senha', validators=[DataRequired(), EqualTo('senha')])
     telefone = StringField('Telefone', validators=[DataRequired()])
     nif = StringField('NIF', validators=[DataRequired(), Length(min=7, max=7)])
     submit = SubmitField('Cadastrar')
 
+    # Validações customizadas corrigidas (sem conflito de variáveis)
     def validate_telefone(self, telefone):
         existing = Usuario.query.filter_by(telefone=telefone.data).first()
         if existing:
@@ -52,8 +53,8 @@ class FuncionarioRegisterForm(FlaskForm):
             raise ValidationError("E-mail já cadastrado.")
 
     def validate_nif(self, nif):
-        existing = UsuarioFuncionario.query.filter_by(nif=nif.data).first()
-        if existing:
+        existing_nif = UsuarioFuncionario.query.filter_by(nif=nif.data).first()
+        if existing_nif:
             raise ValidationError("NIF já cadastrado!")
 
 

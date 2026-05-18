@@ -11,7 +11,7 @@ from werkzeug.utils import secure_filename
 
 from cantinas_carvalho import app, bcrypt, db, mail
 from cantinas_carvalho.forms import ComumRegisterForm, FuncionarioRegisterForm, LoginForm, ProdutoForm
-from cantinas_carvalho.models import Usuario, UsuarioAluno, UsuarioFuncionario, ItemCardapio, Administrador, Categoria
+from cantinas_carvalho.models import Usuario, UsuarioAluno, UsuarioFuncionario, ItemCardapio, Administrador, Categoria, Conta
 
 # =========================
 # HOME
@@ -88,36 +88,47 @@ def cadastrarFuncionario():
     register_form = FuncionarioRegisterForm()
 
     if register_form.validate_on_submit():
-        senha_hash = bcrypt.generate_password_hash(
+        # 1. Criptografa a senha vinda do input HTML (name="senha")
+        senha_criptografada = bcrypt.generate_password_hash(
             register_form.senha.data
         ).decode('utf-8')
 
+        # 2. Cria o Usuário base batendo exatamente com as colunas da sua tabela
         novo_usuario = Usuario(
             nome=register_form.nome.data,
             email=register_form.email.data,
-            senha_hash=senha_hash,
+            senha_hash=senha_criptografada,  # Alinhado com o banco físico!
             telefone=register_form.telefone.data,
-            salt = os.urandom(16).hex()
+            salt=os.urandom(16).hex()
         )
-
         db.session.add(novo_usuario)
+        db.session.commit()  # Banco gera o id_usuario
+
+        # 3. Cria a Conta de forma automatizada
+        nova_conta = Conta(
+            id_usuario=novo_usuario.id_usuario,
+            saldo=0.00
+            # se no seu modelo aceitar o campo status, deixe: status='ativo'
+        )
+        db.session.add(nova_conta)
         db.session.commit()
 
+        # 4. Cria o vínculo do Funcionário
         funcionario = UsuarioFuncionario(
             id_usuario=novo_usuario.id_usuario,
+            id_conta=nova_conta.id_conta,
             nif=register_form.nif.data
         )
-
         db.session.add(funcionario)
         db.session.commit()
 
         return redirect(url_for('cardapio'))
 
     else:
-        print("ERROS DO FORM:", register_form.errors)
+        # ATENÇÃO: Verifique o que vai printar aqui no console se a página limpar!
+        print("ERROS DO FORM ATUALIZADO:", register_form.errors)
 
     return render_template('cadastroFuncionario.html', form=register_form)
-
 
 # =========================
 # LOGIN
@@ -163,12 +174,13 @@ def esqueceuSenha():
                 session['etapa'] = 'codigo'
 
                 email_msg = Message(
-                    subject='Recuperação de Senha',
+                    subject='🔒 Recuperação de Senha - Cantinas Carvalho',
                     sender=app.config['MAIL_DEFAULT_SENDER'],
                     recipients=[email]
                 )
 
-                email_msg.body = f'Seu código é: {codigo}'
+                email_msg.html = render_template('email.html', codigo=codigo)
+
                 mail.send(email_msg)
 
                 return redirect(url_for('esqueceuSenha'))
