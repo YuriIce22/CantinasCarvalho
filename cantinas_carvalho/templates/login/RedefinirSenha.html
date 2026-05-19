@@ -1,100 +1,81 @@
-{% extends 'base.html' %} {% block titulo %}Cantinas Carvalho | Esqueceu a senha{% endblock %}
+{% extends 'base.html' %}
+{% block titulo %}Cantinas Carvalho | Esqueceu a senha{% endblock %}
 
 {% block conteudo %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/redefinirSenha.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/redefinirSenha.css') }}">
 
-    {% if etapa == 'email' %}
+{% if etapa == 'email' %}
+<div class="container" id="redefinir">
+    <h1>Redefinição de senha</h1>
+    <p>Digite o email que você cadastrou na sua conta:</p>
+    <form method="POST">
+        <input class="email" type="email" name="email" placeholder="Digite o seu e-mail" required>
+        <button type="submit" name="enviar_email" value="1" class="botao">
+            Enviar o código
+        </button>
+    </form>
+</div>
+{% endif %}
 
-    <div class="container" id="redefinir">
+{% if etapa == 'codigo' %}
+<div class="container" id="cod">
+    <!--reset=1 é um sinal enviado na URL para indicar ao Flask que deve voltar para a tela de email.-->
+    <a href="{{ url_for('esqueceuSenha', reset=1) }}" class="botao-x">X</a>
 
-        <h1>Redefinição de senha</h1>
+    <h1>Confirmação de código</h1>
 
-        <p>Digite o email que você cadastrou na sua conta:</p>
+    <form method="POST">
+        <div class="codigo">
+            <!-- oninput="this.nextElementSibling.focus()" faz com que, assim que você digitar um caractere, o foco pule para o próximo input.-->
+            <input name="c1" maxlength="1" class="cod" oninput="this.nextElementSibling.focus()">
+            <input name="c2" maxlength="1" class="cod" oninput="this.nextElementSibling.focus()">
+            <input name="c3" maxlength="1" class="cod" oninput="this.nextElementSibling.focus()">
+            <input name="c4" maxlength="1" class="cod">
+        </div>
 
-        <form method="POST">
+        <button type="submit" name="verificar_codigo" value="1" class="botaoCodigo">
+            Verificar o código
+        </button>
 
-            <input class="email" type="email" name="email" placeholder="Digite o seu e-mail" required>
-
-            <button type="submit" name="enviar_email" value="1" class="botao">
-                Enviar o código
+        <div class="link-container" style="text-align: center; margin-top: 10px;">
+            <button type="submit" name="reenviar_codigo" value="1" class="link">
+                Reenviar código
             </button>
+        </div>
+    </form>
+</div>
+{% endif %}
 
-        </form>
+{% if etapa == 'nova_senha' %}
+<div class="container" id="novaSenha">
+   <!--reset=1 é um sinal enviado na URL para indicar ao Flask que deve voltar para a tela de email.-->
+    <a href="{{ url_for('esqueceuSenha', reset=1) }}" class="botao-x">X</a>
 
-    </div>
+    <h1>Nova senha</h1>
+    <h3>Sua nova senha deve conter:</h3>
+    <ul>
+        <li>Minimo 8 caracteres</li>
+        <li>Ao menos uma letra maiúscula (A–Z)</li>
+        <li>Ao menos uma letra minúscula (a–z)</li>
+        <li>Ao menos um número (0–9)</li>
+        <li>Evite informações pessoais</li>
+        <li>Não utilize senhas fáceis ou sequências</li>
+        <li>Não reutilize senhas antigas</li>
+    </ul>
 
-    {% endif %}
+    <form method="POST">
+        <p>Nova senha:</p>
+        <input class="email" type="password" name="senha" placeholder="Digite a sua nova senha" required>
 
-    {% if etapa == 'codigo' %}
+        <p>Confirme a sua nova senha:</p>
+        <input class="email" type="password" name="confirmar" placeholder="Confirme a sua nova senha" required>
 
-    <div class="container" id="cod">
+        <button type="submit" name="alterar_senha" value="1" class="botao">
+            Alterar a senha
+        </button>
+    </form>
+</div>
+{% endif %}
 
-        <a href="{{ url_for('esqueceuSenha') }}" class="botao-x">
-            X
-        </a>
-
-        <h1>Confirmação de código</h1>
-
-        <form method="POST">
-
-            <div class="codigo">
-                <input name="c1" maxlength="1" class="cod">
-                <input name="c2" maxlength="1" class="cod">
-                <input name="c3" maxlength="1" class="cod">
-                <input name="c4" maxlength="1" class="cod">
-
-            </div>
-
-            <button type="submit" name="verificar_codigo" value="1" class="botaoCodigo">
-                Verificar o código
-            </button>
-
-        </form>
-
-    </div>
-
-    {% endif %}
-
-    {% if etapa == 'nova_senha' %}
-
-    <div class="container" id="novaSenha">
-
-        <a href="{{ url_for('esqueceuSenha') }}" class="botao-x">
-            X
-        </a>
-
-        <h1>Nova senha</h1>
-
-        <h3>Sua nova senha deve conter:</h3>
-
-        <ul>
-            <li>Sua senha deve conter no mínimo 8 caracteres</li>
-            <li>Deve incluir pelo menos uma letra maiúscula (A–Z)</li>
-            <li>Deve incluir pelo menos uma letra minúscula (a–z)</li>
-            <li>Deve conter pelo menos um número (0–9)</li>
-            <li>Evite usar informações pessoais (nome, data de nascimento, etc.)</li>
-            <li>Não utilize senhas fáceis ou sequências (ex: 123456, abc123)</li>
-            <li>Não reutilize senhas já usadas anteriormente</li>
-        </ul>
-
-        <form method="POST">
-
-            <p>Nova senha:</p>
-
-            <input class="email" type="password" name="senha" placeholder="Digite a sua nova senha" required>
-
-            <p>Confirme a sua nova senha:</p>
-
-            <input class="email" type="password" name="confirmar" placeholder="Confirme a sua nova senha" required>
-
-            <button type="submit" name="alterar_senha" value="1" class="botao">
-                Alterar a senha
-            </button>
-
-        </form>
-
-    </div>
-
-    {% endif %}
-
+<script src="{{ url_for('static', filename='js/tema-autenticacao.js') }}"></script>
 {% endblock %}

@@ -11,6 +11,9 @@
     --botao-hover: #3d1706;
     --btn-toggle-bg: #e3d4ba;
     --indicador: #3a231a;
+
+    --btn-toggle: #3D1807;
+    --indicador: #E0D1AF;
 }
 
 .tema-escuro {
@@ -25,6 +28,9 @@
     --btn-toggle-bg: #3a231a;
     --botao-hover: #d6caa8;
     --indicador: #F0ECE1;
+
+    --btn-toggle: #F0ECE1;
+    --indicador: #2D1D17;
 }
 
 * {
@@ -59,6 +65,7 @@ header {
     align-items: center;
     padding: 20px;
     width: 100%;
+    margin-top:20px;
 }
 
 /* Botão Voltar (Seta da Base) */
@@ -77,54 +84,46 @@ header {
 }
 
 /* Switch de Tema (Botão Sol/Lua) */
-.btn {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 10;
+#dark-mode {
+    display: none;
 }
 
-.checkbox {
-    opacity: 0;
-    position: absolute;
-}
-
-.label {
-    background-color: var(--btn-toggle-bg);
-    border-radius: 50px;
-    cursor: pointer;
+.switch label {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 5px;
+    justify-content: space-between;
+    width: 80px;
+    height: 40px;
+    background: var(--btn-toggle);
+    border-radius: 50px;
+    padding: 0 10px;
     position: relative;
-    height: 26px;
-    width: 50px;
-    transform: scale(1.5);
-    transition: background-color 0.3s ease;
+    cursor: pointer;
 }
 
-.label .indicador {
-    background-color: var(--indicador);
-    border-radius: 50%;
+.switch .indicador {
     position: absolute;
-    top: 2px;
-    left: 2px;
-    height: 22px;
-    width: 22px;
-    transition: transform 0.2s linear, background-color 0.3s ease;
+    top: 4px;
+    left: 4px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--indicador);
+    transition: .3s;
 }
 
-#botao-tema:checked + .label .indicador {
-    transform: translateX(24px);
+#dark-mode:checked + label .indicador {
+    transform: translateX(40px);
 }
 
-.img-lua, .img-sol {
-    width: 16px;
-    height: 16px;
+.icon-moon,
+.icon-sun {
+    width: 18px;
+    position: relative;
+    z-index: 1;
 }
 
-/* CONTAINER DE REDEFINIÇÃO DE SENHA / LOGIN */
+/* Container deRedefinição de Senha / Login */
 .container {
     margin: auto 20px;
     padding: 40px;
@@ -157,7 +156,7 @@ header {
     margin-top: 25px;
     font-size: 13px;
     display: block;
-    margin-left: 15px; /* Margem padrão do parágrafo */
+    margin-left: 15px;
     font-weight: bold;
 }
 .container .email {
@@ -169,8 +168,6 @@ header {
     border-radius: 8px;
     width: 100%;
     max-width: 575px;
-
-    /* Alterado de 'margin: 0 auto 15px auto' para alinhar à esquerda com o <p> */
     margin: 8px 0 20px 15px;
 
     outline: none;
@@ -214,6 +211,7 @@ body.tema-escuro .container .email {
 }
 
 /* Inputs de 4 dígitos do código de confirmação */
+
 .cod {
     width: 90px;
     height: 90px;
@@ -241,6 +239,7 @@ body.tema-escuro .cod {
 }
 
 /* Botão Fechar / Voltar (X) */
+
 .container .botao-x {
     display: inline-block;
     text-decoration: none;
@@ -254,4 +253,28 @@ body.tema-escuro .cod {
 .container .botao-x:hover {
     color: var(--botao-hover);
     transform: scale(1.2);
+}
+
+/*Link de Reenviar Código*/
+
+.link-container {
+    display: flex;
+    justify-content: center; /* centraliza horizontalmente */
+    margin-top: 10px;
+}
+
+.link {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 1em;
+    padding: 0;
+    margin-top: 8px;
+}
+
+.link:hover {
+    transform: scale(1.02);
+    text-decoration: underline;
 }

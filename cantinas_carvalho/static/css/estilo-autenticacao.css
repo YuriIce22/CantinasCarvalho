@@ -1,10 +1,8 @@
 /* Contém todo conteúdo de estilização (css) das telas de cadastros e login*/
 
-
 /* =========================================
    1. VARIÁVEIS DE AMBIENTE (TEMAS)
    ========================================= */
-
 :root {
     /* Tema Claro (Padrão) */
     --font-main: 'Inter', sans-serif;
@@ -16,13 +14,16 @@
     --text-color: #652A0E;
     --placeholder-color: #CEBF9D;
     --border-color: #ccc;
-    --bottun-hover: #3d1706;
+    --button-hover: #3d1706;
     --botao: #652A0E;
     --botao-hover: #3d1706;
+
+    --btn-toggle: #3D1807;
+    --indicador: #E0D1AF;
+
 }
 
 .tema-escuro {
-    /* Tema Escuro - Sobrescreve apenas o necessário */
     --bg-color: #1A110E;
     --card-bg: #2D1D17;
     --input-bg: #402820;
@@ -31,16 +32,17 @@
     --text-color: #F0ECE1;
     --placeholder-color: #F0ECE1;
     --border-color: #5a3a2f;
-    --btn-toggle-bg: #3a231a;
-    --bottun-hover: #d6caa8;
+    --button-hover: #d6caa8;
     --botao: #F0ECE1;
     --botao-hover: #d6caa8;
+
+    --btn-toggle: #F0ECE1;
+    --indicador: #2D1D17;
 }
 
 /* =========================================
    2. RESET E ESTRUTURA GLOBAL
    ========================================= */
-
 * {
     box-sizing: border-box;
 }
@@ -51,8 +53,8 @@ body {
     margin: 0;
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    transition: background-color 0.3s ease;
+    min-height: 100vh; /* Melhor para scroll */
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 header {
@@ -62,6 +64,7 @@ header {
 .topo {
     display: flex;
     align-items: center;
+    justify-content: space-between; /* distribui os itens nas extremidades */
     padding: 20px;
     width: 100%;
 }
@@ -69,8 +72,6 @@ header {
 /* =========================================
    3. COMPONENTES (BOTÕES E TOGGLE)
    ========================================= */
-
-/* Botão Voltar (Seta) */
 .voltar {
     font-size: 20px;
     color: var(--botao);
@@ -85,66 +86,53 @@ header {
     transform: scale(1.05);
 }
 
-/* Switch de Tema (Botão Sol/Lua) */
-.btn {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    z-index: 10;
+
+/*Botão Modo Escuro e Claro*/
+
+#dark-mode {
+    display: none;
 }
 
-.checkbox {
-    opacity: 0;
-    position: absolute;
-}
-
-.label {
-    background-color: #e3d4ba;
-    border-radius: 50px;
-    cursor: pointer;
+.switch label {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 5px;
+    justify-content: space-between;
+    width: 80px;
+    height: 40px;
+    background: var(--btn-toggle);
+    border-radius: 50px;
+    padding: 0 10px;
     position: relative;
-    height: 26px;
-    width: 50px;
-    transform: scale(1.5);
-    transition: background-color 0.3s ease;
+    cursor: pointer;
 }
 
-.tema-escuro .label {
-    background-color: var(--btn-toggle-bg);
-}
-
-.label .indicador {
-    background-color: #3a231a;
-    border-radius: 50%;
+.switch .indicador {
     position: absolute;
-    top: 2px;
-    left: 2px;
-    height: 22px;
-    width: 22px;
-    transition: transform 0.2s linear, background-color 0.3s ease;
+    top: 4px;
+    left: 4px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--indicador);
+    transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
-.tema-escuro .label .indicador {
-    background-color: #F0ECE1;
+#dark-mode:checked + label .indicador {
+    transform: translateX(40px);
 }
 
-#botao-tema:checked + .label .indicador {
-    transform: translateX(24px);
+.icon-moon,
+.icon-sun {
+    width: 18px;
+    position: relative;
+    z-index: 1;
 }
 
-.img-lua, .img-sol {
-    width: 16px;
-    height: 16px;
-}
+/*Fim do  Botão Modo Escuro e Claro*/
 
 /* =========================================
    4. FORMULÁRIO E LOGIN
    ========================================= */
-
 #login {
     flex: 1;
     width: 100%;
@@ -202,14 +190,12 @@ input::placeholder {
     color: var(--placeholder-color);
 }
 
-/* Botão de Ação (Cadastrar/Entrar) */
 .btn-container {
     display: flex;
     justify-content: center;
     margin-top: 20px;
 }
 
-/* Base (comum pra todos) */
 .button {
     width: 100%;
     padding: 12px;
@@ -222,27 +208,26 @@ input::placeholder {
     cursor: pointer;
 }
 
-/* Login menor */
 .button-login {
     max-width: 210px;
 }
 
-/* Cadastro maior */
 .button-cadastro {
     max-width: 100%;
 }
 
 .button:hover {
     transform: scale(1.05);
-    background: var(--bottun-hover);
+    background: var(--button-hover);
 }
 
 .button:active {
     transform: scale(0.95);
 }
 
-/* Link de Alternância */
 #link {
+    display: flex;
+    justify-content: center;
     display: flex;
     justify-content: center;
     margin-top: 12px;
@@ -257,10 +242,21 @@ input::placeholder {
     text-decoration: underline;
 }
 
+.erro-alerta {
+    background-color: #ffe6e6;
+    border: 1px solid #de3333;
+    color: #de3333;
+    padding: 8px 13px;
+    margin: 8px 0;
+    border-radius: 5px;
+    font-size: 14px;
+    line-height: 1.4;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
 /* =========================================
    5. RESPONSIVIDADE
    ========================================= */
-
 @media (max-width: 768px) {
     .topo {
         padding: 15px;

@@ -185,20 +185,18 @@ def definir_perfil(usuario):
 @app.route('/esqueceuSenha', methods=['GET', 'POST'])
 def esqueceuSenha():
 
+    # Se for GET e tiver reset, volta para a tela de email
+    if request.method == 'GET' and request.args.get('reset'):
+        session['etapa'] = 'email'
+
     if request.method == 'POST':
 
-        # ======================
-        # ENVIAR EMAIL
-        # ======================
+        # Enviar Email
         if request.form.get('enviar_email'):
-
             email = request.form.get('email')
             usuario = Usuario.query.filter_by(email=email).first()
-
             if usuario:
-
                 codigo = str(random.randint(1000, 9999))
-
                 session['codigo'] = codigo
                 session['usuario_id'] = usuario.id_usuario
                 session['etapa'] = 'codigo'
@@ -208,76 +206,73 @@ def esqueceuSenha():
                     sender=app.config['MAIL_DEFAULT_SENDER'],
                     recipients=[email]
                 )
-
                 email_msg.html = render_template('login/email.html', codigo=codigo)
-
                 mail.send(email_msg)
-
-                return redirect(url_for('esqueceuSenha'))
-
             else:
-
                 flash('E-mail não encontrado!')
-                return redirect(url_for('esqueceuSenha'))
 
-        # ======================
-        # VALIDAR CÓDIGO
-        # ======================
+            return redirect(url_for('esqueceuSenha'))
+
+        # Reenviar Código
+        elif request.form.get('reenviar_codigo'):
+            usuario = Usuario.query.get(session.get('usuario_id'))
+            if usuario:
+                codigo = str(random.randint(1000, 9999))
+                session['codigo'] = codigo
+                session['etapa'] = 'codigo'
+
+                email_msg = Message(
+                    subject='🔒 Recuperação de Senha - Cantinas Carvalho',
+                    sender=app.config['MAIL_DEFAULT_SENDER'],
+                    recipients=[usuario.email]
+                )
+                email_msg.html = render_template('login/email.html', codigo=codigo)
+                mail.send(email_msg)
+                flash('Código reenviado! Verifique seu email.')
+            else:
+                flash('Erro ao reenviar código!')
+
+            return redirect(url_for('esqueceuSenha'))
+
+        # Validar Código
         elif request.form.get('verificar_codigo'):
-
             codigo_digitado = (
                 request.form.get('c1', '') +
                 request.form.get('c2', '') +
                 request.form.get('c3', '') +
                 request.form.get('c4', '')
             )
-
             if codigo_digitado == session.get('codigo'):
-
                 session['etapa'] = 'nova_senha'
-                return redirect(url_for('esqueceuSenha'))
-
             else:
-
                 flash('Código inválido!')
-                return redirect(url_for('esqueceuSenha'))
 
-        # ======================
-        # ALTERAR SENHA
-        # ======================
+            return redirect(url_for('esqueceuSenha'))
+
+        # Alterar Senha
         elif request.form.get('alterar_senha'):
-
             senha = request.form.get('senha')
             confirmar = request.form.get('confirmar')
 
             if senha != confirmar:
-
                 flash('As senhas não coincidem!')
                 return redirect(url_for('esqueceuSenha'))
 
             usuario = Usuario.query.get(session.get('usuario_id'))
-
             if usuario:
-
                 usuario.senha_hash = generate_password_hash(senha).decode('utf-8')
                 db.session.commit()
-
                 session.clear()
-
                 flash('Senha alterada com sucesso!')
                 return redirect('/login')
-
             else:
-
                 flash('Usuário não encontrado!')
                 return redirect(url_for('login'))
 
-    # ======================
-    # GET (ÚNICA FONTE DA ETAPA)
-    # ======================
+    # GET
     etapa = session.get('etapa', 'email')
-
     return render_template('login/RedefinirSenha.html', etapa=etapa)
+
 
 # =========================
 # CARDÁPIO

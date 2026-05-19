@@ -22,29 +22,22 @@
 
 <header>
     <div class="topo">
-
+        <!-- Seta voltar -->
         <a href="/" class="voltar">
             <i class="fa-solid fa-arrow-left"></i>
         </a>
 
-        <!-- BOTÃO TEMA (GLOBAL PARAS AS TELAS SE LOGIN E CADASTROS) -->
-        <div class="btn">
-
-            <input type="checkbox"
-                   class="checkbox"
-                   id="botao-tema">
-
-            <label class="label" for="botao-tema">
-
-                <img src="{{ url_for('static', filename='img/sol.png') }}" class="img-sol">
-                <img src="{{ url_for('static', filename='img/lua.png') }}" class="img-lua">
-
-                <div class="indicador"></div>
-
-            </label>
-
+        <!-- Botão de tema -->
+        <div class="toggle-tema">
+            <div class="switch">
+                <input type="checkbox" id="dark-mode">
+                <label for="dark-mode">
+                    <img src="{{ url_for('static', filename='img/lua.png') }}" class="icon-moon" alt="Lua">
+                    <img src="{{ url_for('static', filename='img/sol.png') }}" class="icon-sun" alt="Sol">
+                    <span class="indicador"></span>
+                </label>
+            </div>
         </div>
-
     </div>
 </header>
 

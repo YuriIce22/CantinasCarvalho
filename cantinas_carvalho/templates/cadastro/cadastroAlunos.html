@@ -31,6 +31,12 @@ Cadastro Aluno
         <label>Telefone:</label>
         {{ form.telefone(id="telefone", placeholder="Telefone") }}
 
+       {% if form.errors %}
+            <div class="erro-alerta">
+                ⚠ Verifique os campos: {{ form.errors.values() | sum(start=[]) | join(' ') }}
+            </div>
+        {% endif %}
+
         <div class="btn-container">
             {{ form.submit(class="button button-cadastro") }}
         </div>

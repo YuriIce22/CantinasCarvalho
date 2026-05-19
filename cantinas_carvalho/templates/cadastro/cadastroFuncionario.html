@@ -15,43 +15,32 @@ Cadastro Funcionário
 
         <label>Nome:</label>
         {{ form.nome(id="nome", placeholder="Seu nome") }}
-        {% if form.nome.errors %}
-            <p style="color: red; font-size: 12px;">{{ form.nome.errors[0] }}</p>
-        {% endif %}
 
         <label>E-mail:</label>
         {{ form.email(id="email", placeholder="Seu e-mail") }}
-        {% if form.email.errors %}
-            <p style="color: red; font-size: 12px;">{{ form.email.errors[0] }}</p>
-        {% endif %}
 
         <label>Senha:</label>
         {{ form.senha(placeholder="Senha") }}
-        {% if form.senha.errors %}
-            <p style="color: red; font-size: 12px;">{{ form.senha.errors[0] }}</p>
-        {% endif %}
 
         <label>Confirmar senha:</label>
         {{ form.confirm_senha(placeholder="Confirme sua Senha") }}
-        {% if form.confirm_senha.errors %}
-            <p style="color: red; font-size: 12px;">{{ form.confirm_senha.errors[0] }}</p>
-        {% endif %}
 
         <label>NIF:</label>
         {{ form.nif(id="nif", placeholder="Digite seu NIF") }}
-        {% if form.nif.errors %}
-            <p style="color: red; font-size: 12px;">{{ form.nif.errors[0] }}</p>
-        {% endif %}
 
         <label>Telefone:</label>
         {{ form.telefone(id="telefone", placeholder="Seu Telefone ") }}
-        {% if form.telefone.errors %}
-            <p style="color: red; font-size: 12px;">{{ form.telefone.errors[0] }}</p>
+
+         {% if form.errors %}
+            <div class="erro-alerta">
+                ⚠ Verifique os campos: {{ form.errors.values() | sum(start=[]) | join(' ') }}
+            </div>
         {% endif %}
 
         <div class="btn-container">
            {{ form.submit(class="button button-cadastro") }}
         </div>
+
 
         <a id="link" href="{{ url_for('login') }}">
             Já possui conta?

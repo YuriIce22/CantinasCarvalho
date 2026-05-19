@@ -9,6 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
@@ -34,26 +35,22 @@
     <div class="right">
 
       <a href="{{ url_for('login') }}" class="login-menu">
-        <img src="{{ url_for('static', filename='img/user.png') }}" alt="User">
+        <img src="{{ url_for('static', filename='img/userWhite.png') }}" alt="User">
         <span>Entrar</span>
       </a>
 
       <!-- BOTÃO TEMA -->
-      <div class="btn-tema">
-
-        <input type="checkbox" class="checkbox" id="botao-tema">
-
-        <label class="label" for="botao-tema">
-
-          <img src="{{ url_for('static', filename='img/sol.png') }}" alt="Sol" class="img-sol">
-
-          <img src="{{ url_for('static', filename='img/lua.png') }}" alt="Lua" class="img-lua">
-
-          <div class="indicador"></div>
-
-        </label>
-
-      </div>
+      <div class="toggle-tema">
+            <div class="switch">
+                <input type="checkbox" id="dark-mode">
+                <label for="dark-mode">
+                    <img src="{{ url_for('static', filename='img/lua.png') }}" class="icon-moon" alt="Lua">
+                    <img src="{{ url_for('static', filename='img/sol.png') }}" class="icon-sun" alt="Sol">
+                    <span class="indicador"></span>
+                </label>
+            </div>
+        </div>
+    </div>
 
     </div>
   </header>
@@ -75,12 +72,12 @@
       <div class="buttons">
 
         <a href="/cadastarAlunos" class="btn btn-primary">
-          <img src="{{ url_for('static', filename='img/user.png') }}" alt="">
+          <i class="bi bi-person-fill"></i>
           Cadastrar Aluno
         </a>
 
         <a href="/cadastrarFuncionario" class="btn btn-primary">
-          <img src="{{ url_for('static', filename='img/user.png') }}" alt="">
+          <i class="bi bi-person-fill"></i>
           Cadastrar Funcionário
         </a>
 

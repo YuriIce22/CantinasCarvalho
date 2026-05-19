@@ -14,6 +14,10 @@
   --title-color:#ffffff;
   --text-p: #CEBF9D;
   --text-h: #ffffff;
+  --btn-login: #ffffff;
+
+  --btn-toggle: #3D1807;
+  --indicador: #E0D1AF;
 }
 
 .tema-escuro {
@@ -27,10 +31,14 @@
   --transition:#9e8e65;
   --text-hero:#CEBF9D;
   --line-color:#5a3a2f;
-  --menu-color:#F0ECE1;
+  --menu-color:#000;
   --title-color:#CEBF9D;
   --text-p: #F0ECE1;
   --text-h: #CEBF9D;
+  --btn-login: #ffffff;
+
+ --btn-toggle: #F0ECE1;
+  --indicador: #2D1D17;
 }
 
 /* ESCOPO */
@@ -68,6 +76,7 @@ header {
   display: flex;
   align-items: center;
   gap: 20px;
+
 }
 
 .right {
@@ -77,50 +86,45 @@ header {
 }
 
 /* TEMA */
-.btn-tema {
-  display:flex;
-  align-items:center;
+#dark-mode {
+    display: none;
 }
 
-.checkbox {
-  opacity:0;
-  position:absolute;
+.switch label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 80px;
+    height: 40px;
+    background: var(--btn-toggle);
+    border-radius: 50px;
+    padding: 0 10px;
+    position: relative;
+    cursor: pointer;
 }
 
-.label {
-  background: var(--toggle-bg);
-  border-radius:50px;
-  cursor:pointer;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  position:relative;
-  width:50px;
-  height:26px;
-  padding:5px;
-  transform:scale(1.5);
+.switch .indicador {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--indicador);
+    transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
-.indicador {
-  background: var(--toggle-indicator);
-  border-radius:50%;
-  position:absolute;
-  width:22px;
-  height:22px;
-  top:2px;
-  left:2px;
-  transition:.2s;
+#dark-mode:checked + label .indicador {
+    transform: translateX(40px);
 }
 
-#botao-tema:checked + .label .indicador {
-  transform:translateX(24px);
+.icon-moon,
+.icon-sun {
+    width: 18px;
+    position: relative;
+    z-index: 1;
 }
 
-.img-sol,
-.img-lua {
-  width:16px;
-  height:16px;
-}
 
 /* BOTÃO LOGIN */
 .login-menu {
@@ -128,16 +132,16 @@ header {
   align-items: center;
   gap: 8px;
   padding: 10px 16px;
-  border: 1px solid var(--menu-color);
+  border: 1px solid var(--btn-login);
   border-radius: 8px;
   text-decoration: none;
-  color: var(--menu-color);
+  color: var(--btn-login);
   font-size: 14px;
   transition: 0.3s;
 }
 
 .login-menu span {
-  color: var(--menu-color);
+  color: var(--btn-login);
 }
 
 .login-menu img{
@@ -162,7 +166,7 @@ nav {
 nav a {
   margin-right: 20px;
   text-decoration: none;
-  color: var(--menu-color);
+  color: var(--btn-login);
   font-size: 17px;
   position: relative;
 }
@@ -250,7 +254,6 @@ header nav a:hover {
 .btn img {
   width: 18px;
   height: 18px;
-  filter: brightness(0) invert(1);
 }
 
 .btn-primary {
