@@ -122,7 +122,7 @@ def cadastrarFuncionario():
         db.session.add(funcionario)
         db.session.commit()
 
-        return redirect(url_for('cardapio'))
+        return redirect(url_for('cardapioFuncionario'))
 
     else:
         # ATENÇÃO: Verifique o que vai printar aqui no console se a página limpar!
@@ -290,7 +290,7 @@ def listarCategorias():
             "nome": categoria.nome
         })
 
-    return render_template('cardapio.html')
+    return render_template('cardapio/cardapio.html', categorias=categorias)
 
 @app.route("/cardapio", methods=["GET"])
 def listarCardapio():
@@ -498,7 +498,7 @@ def cadastrarProduto():
         db.session.commit()
 
         flash('Produto cadastrado com sucesso!', 'success')
-        return redirect(url_for('telaAdmin'))
+        return redirect(url_for('cardapio'))
 
     return render_template('admin/cadastrarProduto.html', form=produtoForm)
 
