@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cardapio.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>Cantinas Carvalho - Cardápio</title>
+</head>
+<body class="bg-cardapio">
+  <header class="header-container">
+    <div class="top-bar">
+        <div class="grupo-esquerda">
+          <a href="{{ url_for('index') }}" class="btn-voltar">
+            <i class="fa-solid fa-arrow-left"></i>
+          </a>
+            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo Cantinas Carvalho" class="logo-central">
+        </div>
+
+        <div class="toggle-tema">
+            <div class="switch">
+                <input type="checkbox" id="dark-mode">
+                <label for="dark-mode">
+                    <img src="{{ url_for('static', filename='img/lua.png') }}" class="icon-moon" alt="Lua">
+                     <img src="{{ url_for('static', filename='img/sol.png') }}" class="icon-moon" alt="Lua">
+                    <span class="indicador">️</span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+        <div class="banner-principal">
+            <div class="banner-texto">
+                <span class="banner-sub">Cantinas</span>
+                <h1 class="banner-titulo">Carvalho</h1>
+                <p class="banner-sub">Onde o sabor encontra o carinho</p>
+                <button class="btn-ver-cardapio" onclick="irParaAlmoco()">
+                    Ver cardápio<span class="seta-circulo">  ➔</span>
+                </button>
+            </div>
+            <div class="banner-imagem">
+                <img src="{{ url_for('static', filename='img/lanche-principal.png') }}" alt="Sanduíche">
+            </div>
+        </div>
+    </header>
+
+<div class="filtros-wrapper">
+    <div class="filtros-lista">
+        <button class="btn-categoria active" onclick="mostrarCategoria(this, 'todos')">Todos</button>
+
+        {% for cat in categorias %}
+            {% if cat.nome != 'Almoço' %} <!-- remove Almoço do menu -->
+                <button class="btn-categoria" onclick="mostrarCategoria(this, '{{ cat.id_categoria }}')">{{ cat.nome }}</button>
+            {% endif %}
+        {% endfor %}
+
+        <div class="carrinho-contador">
+            <img src="{{ url_for('static', filename='img/carrinho.png') }}" alt="Carrinho" width="24">
+            <span class="badge">0</span>
+        </div>
+    </div>
+</div>
+
+<!-- Seções de produtos -->
+{% for cat in categorias %}
+    {% if cat.id_categoria != 'todos' %}
+    <section id="{% if cat.nome == 'Almoço' %}secao-almoco{% else %}secao-{{ cat.id_categoria }}{% endif %}" class="secao-produtos">
+        <h2 class="titulo-secao">{{ cat.nome }}</h2>
+        <hr class="linha-secao">
+
+        <div class="grid-produtos">
+        {% for produto in produtos %}
+            {% if produto.id_categoria == cat.id_categoria %}
+                <div class="card-item">
+                    <div class="card-img-wrapper">
+                        <img src="{{ url_for('static', filename='img/hamburgao.png') }}" alt="{{ produto.nome }}">
+                    </div>
+                    <div class="card-info">
+                        <div class="card-header-item">
+                            <h3>{{ produto.nome }}</h3>
+                            {# Esconde o carrinho se for Almoço #}
+                            {% if cat.nome != 'Almoço' %}
+                                <button class="btn-add-cart" onclick="adicionarCarrinho({{ produto.id_item_cardapio }})">🛒</button>
+                            {% endif %}
+                        </div>
+                        <p class="card-desc">{{ produto.descricao }}</p>
+                    </div>
+                    {# Esconde o preço se for Almoço #}
+                    {% if cat.nome != 'Almoço' %}
+                    <div class="card-footer">
+                        <p class="card-preco">R$ {{ produto.preco }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+{% endfor %}
+
+  <button id="btnSubir" onclick="subirTopo()">
+    <img src="{{ url_for('static', filename='img/seta-cima.png') }}" alt="Subir">
+</button>
+  <div id="toast-notification">
+      <div class="toast-content">
+          <div class="toast-icon">✓</div>
+          <p id="toast-message">Item adicionado!</p>
+      </div>
+  </div>
+
+    <script src="{{ url_for('static', filename='js/cardapio.js') }}"></script>
+</body>
+</html>

@@ -5,17 +5,20 @@ from flask_bcrypt import generate_password_hash
 from flask_mail import Message
 from functools import wraps
 
-from flask import render_template, redirect, url_for, session, request, flash
+from flask import render_template, redirect, url_for, session, request, flash, jsonify
 from flask_login import login_user, login_required, current_user
 from werkzeug.utils import secure_filename
 
 from cantinas_carvalho import app, bcrypt, db, mail
 from cantinas_carvalho.forms import ComumRegisterForm, FuncionarioRegisterForm, LoginForm, ProdutoForm
-from cantinas_carvalho.models import Usuario, UsuarioAluno, UsuarioFuncionario, ItemCardapio, Administrador, Categoria, Conta
+from cantinas_carvalho.models import Usuario, UsuarioAluno, UsuarioFuncionario, ItemCardapio, Administrador, Categoria, Conta, ItemVenda, Pedido
+
+carrinho = []
 
 # =========================
 # HOME
 # =========================
+
 @app.route("/")
 def index():
 
@@ -44,10 +47,10 @@ def admin_required(f):
 
     return decorated_function
 
-
 # =========================
 # CADASTRO ALUNO
 # =========================
+
 @app.route('/cadastarAlunos', methods=['GET', 'POST'])
 def cadastrarAluno():
     register_form = ComumRegisterForm()
@@ -74,12 +77,12 @@ def cadastrarAluno():
 
         return redirect(url_for('cardapio'))
 
-    return render_template('cardapio/cadastroAlunos.html', form=register_form)
-
+    return render_template('cadastro/cadastroAlunos.html', form=register_form)
 
 # =========================
 # CADASTRO FUNCIONARIO
 # =========================
+
 @app.route('/cadastrarFuncionario', methods=['GET', 'POST'])
 def cadastrarFuncionario():
     register_form = FuncionarioRegisterForm()
@@ -125,11 +128,12 @@ def cadastrarFuncionario():
         # ATENÇÃO: Verifique o que vai printar aqui no console se a página limpar!
         print("ERROS DO FORM ATUALIZADO:", register_form.errors)
 
-    return render_template('cadastroFuncionario.html', form=register_form)
+    return render_template('cadastro/cadastroFuncionario.html', form=register_form)
 
 # =========================
 # LOGIN
 # =========================
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     login_form = LoginForm()
@@ -142,21 +146,37 @@ def login():
             admin = Administrador.query.filter_by(id_usuario=usuario.id_usuario).first()
             if admin:
                 login_user(usuario)
-                return redirect(url_for('cardapio'))
+                definir_perfil(usuario)
+                return redirect(url_for('telaAdmin'))
 
             funcionario = UsuarioFuncionario.query.filter_by(id_usuario=usuario.id_usuario).first()
             if funcionario:
                 login_user(usuario)
-                return redirect(url_for('cardapio'))
+                definir_perfil(usuario)
+                return redirect(url_for('cardapioFuncionario'))
 
             aluno = UsuarioAluno.query.filter_by(id_usuario=usuario.id_usuario).first()
             if aluno:
                 login_user(usuario)
-                return redirect(url_for('cardapio'))
+                definir_perfil(usuario)
+                return redirect(url_for('listarCardapio'))
         else:
             flash('Email ou senha inválidos')
 
     return render_template('login/login.html', form=login_form)
+
+def definir_perfil(usuario):
+    if Administrador.query.filter_by(id_usuario=usuario.id_usuario).first():
+        session['perfil'] = 'admin'
+
+    elif UsuarioFuncionario.query.filter_by(id_usuario=usuario.id_usuario).first():
+        session['perfil'] = 'funcionario'
+
+    elif UsuarioAluno.query.filter_by(id_usuario=usuario.id_usuario).first():
+        session['perfil'] = 'aluno'
+
+    else:
+        session['perfil'] = 'desconhecido'
 
 # =========================
 # REDEFINIR SENHA
@@ -263,16 +283,150 @@ def esqueceuSenha():
 # CARDÁPIO
 # =========================
 
-@app.route('/cardapio')
-def cardapio():
-    # Busca todos os itens cadastrados no banco de dados
-    itens = ItemCardapio.query.all()
-    return render_template('cardapio/cardapio.html', itens=itens)
+@app.route("/categorias", methods=["GET"])
+def listarCategorias():
+    categorias_banco = Categoria.query.all()
 
+    categorias = []
+
+    for categoria in categorias_banco:
+        categorias.append({
+            "id": categoria.id_categoria,
+            "nome": categoria.nome
+        })
+
+    return render_template('cardapio.html')
+
+@app.route("/cardapio", methods=["GET"])
+def listarCardapio():
+    id_categoria = request.args.get('categoria')
+
+    categorias = Categoria.query.all()
+
+    if id_categoria:
+        produtos = ItemCardapio.query.filter_by(id_categoria=id_categoria, disponivel=True).all()
+
+    else:
+        produtos = ItemCardapio.query.filter_by(disponivel=True).all()
+
+    return render_template('cardapio/cardapio.html', categorias=categorias, produtos=produtos)
+
+# Rota de carrinho
+@app.route("/carrinho", methods=["POST"])
+def adicionarCarrinho():
+
+    dados = request.get_json()
+
+    id_produto = dados["produto_id"]
+    quantidade = dados["quantidade"]
+
+    produto = ItemCardapio.query.get(id_produto)
+
+    if not produto:
+
+        return jsonify({
+            "mensagem": "produto não encontrado!",
+        }), 404
+
+    item = {
+        "id": produto.id_item_cardapio,
+        "nome": produto.nome,
+        "preco": float(produto.preco),
+        "imagem": produto.imagem,
+        "quantidade": quantidade
+    }
+
+    carrinho.append(item)
+
+    return jsonify({
+        "status": "sucesso",
+        "produto_nome": produto.nome
+    })
+
+@app.route("/carrinho", methods=["GET"])
+def listarCarrinho():
+
+    valor_total = 0
+
+    for item in carrinho:
+        subtotal = item["preco"] * item["quantidade"]
+        valor_total += subtotal
+
+    return render_template('carrinho.html', valor_total=valor_total)
+
+@app.route("/carrinho/<int:id_produto>", methods=["DELETE"])
+def removerCarrinho(id_produto):
+
+    for item in carrinho:
+
+        if item["id"] == id_produto:
+
+            carrinho.remove(item)
+
+            return jsonify({
+                "mensagem": "item removido"
+            })
+
+    return jsonify({
+        "erro": "item não encontrado"
+    }), 404
+
+# Rota de pedido
+@app.route("/pedido", methods=["POST"])
+def criarPedido():
+    dados = request.get_json()
+
+    id_usuario = dados["id_usuario"]
+
+    valor_total = 0
+
+    for item in carrinho:
+        valor_total += (item["preco"] * item["quantidade"])
+
+    pedido = Pedido(id_usuario = id_usuario, valor_pedido = valor_total, qr_code_retirada="qr_teste", codigo_unico = "codigo_teste")
+
+    db.session.add(pedido)
+    db.session.commit()
+
+    for item in carrinho:
+        item_venda = ItemVenda(id_pedido = pedido.id_pedido, id_item_cardapio = item["id"], quantidade = item["quantidade"], valor_unitario = item["preco"])
+
+        db.session.add(item_venda)
+
+    db.session.commit()
+
+    carrinho.clear()
+
+    return jsonify({
+        "mensagem": "pedido criado com sucesso",
+        "id_pedido": pedido.id_pedido
+    })
+
+@app.route("/cardapioFuncionario")
+@login_required
+def cardapioFuncionario():
+
+    categorias = Categoria.query.all()
+
+    produtos = ItemCardapio.query.filter_by(disponivel=True).all()
+
+    return render_template("cardapio/cardapioFuncionario.html", categorias=categorias, produtos=produtos)
+
+@app.route("/perfil")
+@login_required
+def perfilFuncionario():
+
+    funcionario = UsuarioFuncionario.query.filter_by(id_usuario=current_user.id_usuario).first()
+
+    if not funcionario:
+        return redirect(url_for("listarCardapio"))
+
+    return render_template("conta.html")
 
 # =========================
 # TELA ADMIN
 # =========================
+
 @app.route('/admin')
 @login_required
 @admin_required
@@ -294,9 +448,6 @@ def telaAdmin():
         produtos_indisponiveis=produtos_indisponiveis,
         admin_nome=current_user.nome
     )
-
-
-
 
 @app.route('/admin/cadastrarProduto', methods=['GET', 'POST'])
 @login_required
@@ -359,6 +510,7 @@ def cadastrarProduto():
 # =========================
 # PEDIDOS ADMIN
 # =========================
+
 @app.route('/admin/pedidos')
 @login_required
 @admin_required
@@ -385,10 +537,10 @@ def pedidoAdmin():
         admin_nome=current_user.nome
     )
 
-
 # =========================
 # ALTERAR STATUS PEDIDO
 # =========================
+
 @app.route('/admin/pedido/<int:id_pedido>/status/<string:novo_status>')
 @login_required
 @admin_required
@@ -404,10 +556,10 @@ def alterarStatusPedido(id_pedido, novo_status):
 
     return redirect(url_for('pedidoAdmin'))
 
-
 # =========================
 # RELATÓRIOS ADMIN
 # =========================
+
 @app.route('/admin/relatorios')
 @login_required
 @admin_required
@@ -437,10 +589,10 @@ def relatorioAdmin():
         admin_nome=current_user.nome
     )
 
-
 # =========================
 # USUÁRIOS ADMIN
 # =========================
+
 @app.route('/admin/usuarios')
 @login_required
 @admin_required

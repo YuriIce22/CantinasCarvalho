@@ -188,6 +188,22 @@ class ItemCardapio(db.Model):
             raise ValueError("Estoque inválido.")
         return value
 
+class ItemVenda(db.Model):
+    __tablename__ = "item_venda"
+    __table_args__ = {"schema": "cantina"}
+
+    id_item_venda = db.Column(db.Integer, primary_key=True)
+    id_pedido = db.Column(db.Integer, db.ForeignKey('cantina.pedido.id_pedido'))
+    id_item_cardapio = db.Column(db.Integer, db.ForeignKey('cantina.item_cardapio.id_item_cardapio'))
+    quantidade = db.Column(db.Integer)
+    valor_unitario = db.Column(db.Numeric(5, 2), nullable=False)
+
+    @validates('valor_unitario')
+    def validar_valor_unitario(self, key, value):
+        if value < 0:
+            raise ValueError("Valor inválido.")
+        return value
+
 # =========================
 # PEDIDO
 # =========================
