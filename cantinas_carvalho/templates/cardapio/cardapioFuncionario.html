@@ -78,7 +78,7 @@
             {% if produto.id_categoria == cat.id_categoria %}
                 <div class="card-item">
                     <div class="card-img-wrapper">
-                        <img src="{{ url_for('static', filename='img/hamburgao.png') }}" alt="{{ produto.nome }}">
+                        <img src="{{ url_for('static', filename='img/produtosImg/' ~ produto.imagem) }}" alt="{{ produto.nome }}">
                     </div>
                     <div class="card-info">
                         <div class="card-header-item">

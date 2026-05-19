@@ -159,9 +159,12 @@ body.tema-escuro .banner-principal {
     background: #F0ECE1 !important;
 }
 
-body.tema-escuro .banner-sub,
-body.tema-escuro .banner-titulo {
+body.tema-escuro .banner-sub {
     color: #2D1D17 !important;
+}
+
+body.tema-escuro .banner-titulo {
+    color: var(--accent-yellow);
 }
 
 body.tema-escuro .btn-ver-cardapio {

@@ -75,7 +75,7 @@ def cadastrarAluno():
         db.session.add(aluno)
         db.session.commit()
 
-        return redirect(url_for('cardapio'))
+        return redirect(url_for('listarCardapio'))
 
     return render_template('cadastro/cadastroAlunos.html', form=register_form)
 
